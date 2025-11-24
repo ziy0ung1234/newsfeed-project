@@ -7,7 +7,7 @@ import lombok.*;
 @Entity
 @Table(name="users")
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseDateEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
