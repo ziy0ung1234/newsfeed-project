@@ -1,7 +1,7 @@
-package common.response;
+package com.newsfeed.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import common.exception.ErrorCode;
+import com.newsfeed.common.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

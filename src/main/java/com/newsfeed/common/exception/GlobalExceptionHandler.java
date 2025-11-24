@@ -1,6 +1,6 @@
-package common.exception;
+package com.newsfeed.common.exception;
 
-import common.response.GlobalResponse;
+import com.newsfeed.common.response.GlobalResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,4 +1,4 @@
-package common.exception;
+package com.newsfeed.common.exception;
 
 import lombok.Getter;
 
