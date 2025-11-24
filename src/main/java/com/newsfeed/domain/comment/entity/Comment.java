@@ -1,5 +1,8 @@
-package com.newsfeed.common.entity;
+package com.newsfeed.domain.comment.entity;
 
+import com.newsfeed.common.entity.*;
+import com.newsfeed.domain.newsfeed.entity.Newsfeed;
+import com.newsfeed.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,7 +10,7 @@ import lombok.*;
 @Entity
 @Table(name="comments")
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
-public class Comment extends BaseDateEntity{
+public class Comment extends BaseDateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,23 +22,21 @@ public class Comment extends BaseDateEntity{
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="user_id",  nullable = false)
-    private User userId;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="newsfeed_id",  nullable = false)
-    private Newsfeed newsfeedId;
+    private Newsfeed newsfeed;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="parent_comment_id",  nullable = false)
-    private Comment parentCommentId;
+    private Comment parentComment;
 
-    public Comment(Comment comment) {
-        this.content = comment.getContent();
-        this.depth = comment.getDepth();
-        this.userId = comment.getUserId();
-        this.newsfeedId = comment.getNewsfeedId();
-        this.parentCommentId = comment;
-
+    public Comment(String content, int depth, User user, Newsfeed newsfeed, Comment parentComment) {
+        this.content = content;
+        this.depth = depth;
+        this.user = user;
+        this.newsfeed = newsfeed;
+        this.parentComment = parentComment;
     }
-
 }
