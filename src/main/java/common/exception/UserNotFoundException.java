@@ -5,6 +5,6 @@ import lombok.Getter;
 @Getter
 public class UserNotFoundException extends NotFoundException {
     public UserNotFoundException(ErrorCode error) {
-        super(error.getMessage(), error.getStatus());
+        super(error);
     }
 }
