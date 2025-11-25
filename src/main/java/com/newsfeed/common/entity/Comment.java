@@ -29,12 +29,12 @@ public class Comment extends BaseDateEntity{
     @JoinColumn(name="parent_comment_id",  nullable = false)
     private Comment parentCommentId;
 
-    public Comment(Comment comment) {
-        this.content = comment.getContent();
-        this.depth = comment.getDepth();
-        this.userId = comment.getUserId();
-        this.newsfeedId = comment.getNewsfeedId();
-        this.parentCommentId = comment;
+    public Comment(String content, int depth, User userId, Newsfeed newsfeedId, Comment parentCommentId) {
+        this.content = content;
+        this.depth = depth;
+        this.userId = userId;
+        this.newsfeedId = newsfeedId;
+        this.parentCommentId = parentCommentId;
 
     }
 
