@@ -1,6 +1,10 @@
 package com.newsfeed.domain.user.service;
 
 import com.newsfeed.common.exception.UserNotFoundException;
+import com.newsfeed.domain.user.dto.deleteResponse.DeleteResponse;
+import com.newsfeed.domain.user.dto.updateDto.UpdateRequest;
+import com.newsfeed.domain.user.dto.updateDto.UpdateResponse;
+import com.newsfeed.domain.user.dto.userInfoDto.UserInfoResponse;
 import com.newsfeed.domain.user.entity.User;
 import com.newsfeed.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,9 +54,15 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
         // 수정 가능한 필드만 업데이트
-        user.setEmail(upRequest.getEmail());
-        user.setUsername(upRequest.getUsername());
-        user.setCellPhoneNumber(upRequest.getCellPhoneNumber());
+        if(upRequest.getEmail() != null && !upRequest.getEmail().isBlank()) {
+            user.setEmail(upRequest.getEmail());
+        }
+        if(upRequest.getUsername() != null && !upRequest.getUsername().isBlank()) {
+            user.setUsername(upRequest.getUsername());
+        }
+        if(upRequest.getCellphone() != null && !upRequest.getCellphone().isBlank()){
+            user.setCellPhoneNumber(upRequest.getCellphone());
+        }
 
         return UpdateResponse.of(user);
     }

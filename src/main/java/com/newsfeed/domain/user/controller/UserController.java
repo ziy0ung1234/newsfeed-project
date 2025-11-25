@@ -1,6 +1,11 @@
 package com.newsfeed.domain.user.controller;
 
 import com.newsfeed.common.exception.LoginFailException;
+import com.newsfeed.common.response.GlobalResponse;
+import com.newsfeed.domain.user.dto.deleteResponse.DeleteResponse;
+import com.newsfeed.domain.user.dto.userInfoDto.UserInfoResponse;
+import com.newsfeed.domain.user.dto.updateDto.UpdateResponse;
+import com.newsfeed.domain.user.dto.updateDto.UpdateRequest;
 import com.newsfeed.domain.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -34,8 +39,10 @@ public class UserController {
         // 3. 토큰에서 userId 추출
         Long userId = jwtProvider.getUserIdFromToken(token);
 
+        UserInfoResponse response = userService.userInfo(targetId);
+
         // 4. 서비스 호출
-        return ResponseEntity.ok(userService.userInfo(userId, targetId));
+        return ResponseEntity.ok(GlobalResponse.success(response));
     }
 
     //정보 수정
@@ -53,7 +60,7 @@ public class UserController {
         // 3. 토큰에서 userId 추출
         Long userId = jwtProvider.getUserIdFromToken(token);
 
-        return ResponseEntity.ok(userService.update(userId,upRequest));
+        return ResponseEntity.ok(GlobalResponse.success(userId));
     }
 
 
@@ -72,7 +79,7 @@ public class UserController {
         // 3. 토큰에서 userId 추출
         Long userId = jwtProvider.getUserIdFromToken(token);
 
-        return ResponseEntity.ok(userId);
+        return ResponseEntity.ok(GlobalResponse.success(userId));
     }
 
     // 유저 프로필 조회
