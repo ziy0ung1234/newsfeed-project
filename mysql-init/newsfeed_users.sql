@@ -27,12 +27,12 @@ CREATE TABLE `users` (
   `email` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `username` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `cellPhoneNumber` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cell_phone_number` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `modified_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `cellPhoneNumber` (`cellPhoneNumber`)
+  UNIQUE KEY `cell_phone_number` (`cell_phone_number`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
