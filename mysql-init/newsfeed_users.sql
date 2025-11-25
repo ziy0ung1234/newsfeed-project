@@ -29,7 +29,7 @@ CREATE TABLE `users` (
   `password` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `cell_phone_number` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `cell_phone_number` (`cell_phone_number`)
