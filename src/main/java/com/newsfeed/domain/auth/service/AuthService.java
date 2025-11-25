@@ -1,7 +1,9 @@
 package com.newsfeed.domain.auth.service;
 
 import com.newsfeed.common.exception.ErrorCode;
+import com.newsfeed.common.exception.GlobalExceptionHandler;
 import com.newsfeed.common.exception.LoginFailException;
+import com.newsfeed.common.exception.SignUpFailException;
 import com.newsfeed.domain.auth.dto.LoginRequest;
 import com.newsfeed.domain.auth.dto.SignUpRequest;
 import com.newsfeed.domain.auth.dto.TokenResponse;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +25,19 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public void signUp(SignUpRequest request) {
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("이미 사용중인 이메일입니다.");
+        // 이메일 형식 체크
+        if (!request.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            throw new SignUpFailException(ErrorCode.INVALID_EMAIL_FORMAT);
+        }
+
+        // 비밀번호 형식 체크
+        if (!isValidPassword(request.getPassword())) {
+            throw new SignUpFailException(ErrorCode.INVALID_PASSWORD_FORMAT);
+        }
+
+        // 중복 이메일 체크
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new SignUpFailException(ErrorCode.USER_ALREADY_EXISTS);
         }
 
         User user = new User(
@@ -36,6 +50,15 @@ public class AuthService {
         userRepository.save(user);
     }
 
+    private boolean isValidPassword(String password) {
+        return password.length() >= 8 &&
+                password.matches(".*[A-Z].*") &&
+                password.matches(".*[a-z].*") &&
+                password.matches(".*\\d.*") &&
+                password.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
+    }
+
+
     public TokenResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new LoginFailException(ErrorCode.USER_NOT_MATCH));
@@ -45,9 +68,10 @@ public class AuthService {
         }
 
         String token = jwtProvider.generateToken(user.getId(), user.getEmail());
-        System.out.println(token);
+        System.out.println("accessToken : " + token);
         Long userId = jwtProvider.getUserId(token);
-        System.out.println(userId);
+        System.out.println("유저 아이디 : " + userId);
         return new TokenResponse(token);
     }
+
 }

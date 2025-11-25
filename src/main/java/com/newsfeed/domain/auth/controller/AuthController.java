@@ -60,6 +60,10 @@ public class AuthController {
         return GlobalResponse.successNodata(200, "로그아웃 완료");
     }
 
+    // 실행 예시 코드
+    // 1. api의 매개변수에 @AuthenticationPrincipal PrincipalDetails principalDetails 를 넣는다.
+    // 2. 그러면 Spring Security 저장소에서 PrincipalDetails 객체에 User 객체를 담아서 넘겨준다.
+    // 3. 그러면 principalDetails 객체 안에있는 getter로 유저 정보를 갖다 쓰면 된다.
     @GetMapping("/me")
     public GlobalResponse<User> getMe(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
