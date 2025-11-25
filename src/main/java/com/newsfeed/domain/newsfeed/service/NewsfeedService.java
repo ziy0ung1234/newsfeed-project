@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.newsfeed.common.exception.ErrorCode.NEWSFEED_NOT_FOUND;
 import static com.newsfeed.common.exception.ErrorCode.USER_NOT_FOUND;
 
 
@@ -46,7 +48,7 @@ public class NewsfeedService {
                 saveNewsfeed.getTitle(),
                 saveNewsfeed.getContent(),
                 saveNewsfeed.getCreatedAt(),
-                saveNewsfeed.getUpdatedAt()
+                saveNewsfeed.getModifiedAt()
         );
     }
 
@@ -65,11 +67,42 @@ public class NewsfeedService {
                     newsfeed.getTitle(),
                     newsfeed.getContent(),
                     newsfeed.getCreatedAt(),
-                    newsfeed.getUpdatedAt()
+                    newsfeed.getModifiedAt()
             );
             // 리스트에 응답한 뉴스피드 객체들을 저장
             myNewsfeedList.add(newsfeedResponse);
         }
         return myNewsfeedList;
+    }
+
+    @Transactional
+    public NewsfeedResponse updateNewsfeed(NewsfeedRequest request, Long newsfeedId){
+        // 수정할 뉴스피드 아이디 데이터 검증 후 조회
+        Newsfeed newsfeed = newsfeedRepository.findById(newsfeedId).orElseThrow(
+                () -> new NotFoundException(NEWSFEED_NOT_FOUND)
+        );
+        // 뉴스피드 업데이트 요청
+        newsfeed.update(request.getTitle(),request.getContent());
+
+        return new NewsfeedResponse(
+                newsfeed.getId(),
+                newsfeed.getTitle(),
+                newsfeed.getContent(),
+                newsfeed.getCreatedAt(),
+                newsfeed.getModifiedAt()
+        );
+    }
+
+    @Transactional
+    public void deleteNewsfeed(Long newsfeedId) {
+        // 뉴스피드 존재 유무
+        boolean newsfeed = newsfeedRepository.existsById(newsfeedId);
+
+        // 뉴스피드가 존재하지 않을경우
+        if(!newsfeed) {
+            throw new NotFoundException(NEWSFEED_NOT_FOUND);
+        }
+        // 뉴스피드 삭제
+        newsfeedRepository.deleteById(newsfeedId);
     }
 }
