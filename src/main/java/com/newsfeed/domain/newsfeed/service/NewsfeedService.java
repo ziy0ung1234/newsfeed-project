@@ -10,10 +10,8 @@ import com.newsfeed.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.newsfeed.common.exception.ErrorCode.USER_NOT_FOUND;
 
 
@@ -27,7 +25,7 @@ public class NewsfeedService {
     @Transactional
     public NewsfeedResponse saveNewsfeed(NewsfeedRequest request, Long userId) {
 
-        // 유저아이디 검증
+        // 유저아이디 검증 후 유저 데이터 조회
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException(USER_NOT_FOUND)
         );
@@ -55,12 +53,8 @@ public class NewsfeedService {
     @Transactional(readOnly = true)
     public List<NewsfeedResponse> myNewsfeed(Long userId) {
 
-        // 유저아이디 검증
-        userRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException(USER_NOT_FOUND)
-        );
-        // 검증 된 유저아이디의 전체 뉴스피드
-        List<Newsfeed> myNewsfeeds = newsfeedRepository.findAll();
+        // 뉴스피드 유저아이디 검증 후 해당 유저아이디의 뉴스피드 목록 조회
+        List<Newsfeed> myNewsfeeds = newsfeedRepository.findByUserId(userId);
 
         List<NewsfeedResponse> myNewsfeedList = new ArrayList<>();
 
