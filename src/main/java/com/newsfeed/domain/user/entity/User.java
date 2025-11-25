@@ -20,7 +20,7 @@ public class User extends BaseDateEntity {
     @Column(nullable = false, unique = true, length = 30)
     private String email;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 200)
     private String password;
 
     @Column(nullable = false,  unique = true, length = 30)
