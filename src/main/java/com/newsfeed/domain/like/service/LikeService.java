@@ -14,6 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 뉴스피드와 댓글에 대한 ‘좋아요’ 등록/취소 기능을 제공하는 서비스입니다.
+ * 요청한 사용자와 리소스의 소유 관계를 검증하여 무단 접근을 방지합니다.
+ * User, Newsfeed, Comment 엔티티를 조회해 Like 엔티티를 생성·삭제합니다.
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional

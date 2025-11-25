@@ -7,6 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 뉴스피드와 댓글에 대한 좋아요/취소 기능을 제공하는 REST 컨트롤러입니다.
+ * 인증이 정해지기 전까지 더미 사용자 ID로 좋아요 요청을 처리합니다.
+ * 각 엔드포인트는 Service 레이어에 위임하며 성공 시 204(No Content)를 반환합니다.
+ */
+
 @RestController
 @RequiredArgsConstructor
 public class LikeController {
