@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/**").permitAll()
+                        .requestMatchers("/user/signup", "/user/login").permitAll()
                         .anyRequest().authenticated()
                 );
 
