@@ -52,7 +52,7 @@ public class NewsfeedService {
         );
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<NewsfeedResponse> myNewsfeed(Long userId) {
 
         // 유저아이디 검증
