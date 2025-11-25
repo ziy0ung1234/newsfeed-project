@@ -28,4 +28,17 @@ public class NewsfeedController {
     public ResponseEntity<List<NewsfeedResponse>> getNewsfeed(@PathVariable Long userId) {
         return ResponseEntity.status(HttpStatus.OK).body(newsfeedService.myNewsfeed(userId));
     }
+
+    @PutMapping("/{newsfeedId}")
+    public ResponseEntity<NewsfeedResponse> updateNewsfeed(
+            @RequestBody NewsfeedRequest request,
+            @PathVariable Long newsfeedId) {
+        return ResponseEntity.status(HttpStatus.OK).body(newsfeedService.updateNewsfeed(request, newsfeedId));
+    }
+
+    @DeleteMapping("/{newsfeedId}")
+    public ResponseEntity<Void> deleteNewsfeed(@PathVariable Long newsfeedId) {
+        newsfeedService.deleteNewsfeed(newsfeedId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
