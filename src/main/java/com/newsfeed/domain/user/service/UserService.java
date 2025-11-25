@@ -29,10 +29,7 @@ public class UserService {
      * - userId : 로그인 유저
      */
     public UserInfoResponse userInfo(Long userId, Long targetId) {
-
         if (userId == null) throw new UserNotFoundException(LOGIN_REQUIRED);
-
-        // 조회 대상(target) 유저 찾기
         User user = userRepository.findById(targetId)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
@@ -45,18 +42,16 @@ public class UserService {
         }
     }
 
+
     /**
      * 내 정보 수정
      */
     public UpdateResponse update(Long userId, UpdateRequest upRequest) {
-
         if (userId == null) throw new UserNotFoundException(LOGIN_REQUIRED);
 
-        // 조회 대상(target) 유저 찾기
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
-        // 수정 가능한 필드만 업데이트
         if (upRequest.getEmail() != null && !upRequest.getEmail().isBlank()) {
             user.setEmail(upRequest.getEmail());
         }
@@ -66,47 +61,41 @@ public class UserService {
         if (upRequest.getCellphone() != null && !upRequest.getCellphone().isBlank()) {
             user.setCellPhoneNumber(upRequest.getCellphone());
         }
-
         return UpdateResponse.of(user);
     }
+
 
     /**
      * 비밀번호 수정
      */
-    public UpdatePasswordResponse updatePasswordRequest(Long userId, UpdatePasswordRequest pwRequest) {
-
+    public UpdatePasswordResponse updatePassword(Long userId, UpdatePasswordRequest pwRequest) {
         if (userId == null) throw new UserNotFoundException(LOGIN_REQUIRED);
-
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
-        //현재 비밀번호가 맞는지 확인
         if (!user.getPassword().equals(pwRequest.getCurrentPassword())) {
             throw new PasswordException(USER_PASSWORD_NOT_FOUND);
         }
 
-        //새로운 비밀번호와 현재 비밀번호 대조
         if (pwRequest.getNwePassword().equals(pwRequest.getCurrentPassword())) {
             throw new PasswordException(PASSWORD_SAME);
         }
 
         user.setPassword(pwRequest.getNwePassword());
-
         return UpdatePasswordResponse.of(user);
     }
+
 
     /**
      * 회원 탈퇴
      */
     public DeleteResponse delete(Long userId) {
-
         if (userId == null) throw new UserNotFoundException(LOGIN_REQUIRED);
 
-        // 조회 대상(target) 유저 찾기
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
         userRepository.delete(user);
-
         return DeleteResponse.of(user.getId(),"회원 탈퇴 완료");
     }
+
 }

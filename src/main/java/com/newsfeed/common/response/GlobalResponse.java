@@ -2,6 +2,7 @@ package com.newsfeed.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.newsfeed.common.exception.ErrorCode;
+import com.newsfeed.domain.user.dto.userInfoDto.UserInfoResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -23,5 +24,9 @@ public class GlobalResponse<T> {
     //성공했는데 응답데이터는 없을시
     public static GlobalResponse<Void> successNodata(int status, String message) {
         return new GlobalResponse<>(status, message, null);
+    }
+
+    public static Object success(UserInfoResponse response) {
+        return null;
     }
 }
