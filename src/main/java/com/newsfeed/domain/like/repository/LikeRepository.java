@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface LikeRepository extends JpaRepository<Like, Long> {
     default Like findOrThrow(Long likeId) {
         return findById(likeId)
-                .orElseThrow(()-> new NotFoundException(ErrorCode.NEWSFEED_NOT_FOUND));
+                .orElseThrow(()-> new NotFoundException(ErrorCode.LIKE_NOT_FOUND));
     }
 }

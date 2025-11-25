@@ -27,4 +27,17 @@ public class LikeController {
         likeService.cancelNewsfeedLike(newsfeedId, likeId, DUMMY_USER_ID);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    @PostMapping("/comments/{commentId}/likes")
+    public ResponseEntity<GlobalResponse<Void>> addCommentLike(@PathVariable Long commentId){
+        likeService.addCommentLike(commentId, DUMMY_USER_ID);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+    @DeleteMapping("/comments/{commentId}/likes/{likeId}")
+    public ResponseEntity<GlobalResponse<Void>> cancelCommentLike(
+            @PathVariable Long commentId,
+            @PathVariable Long likeId
+    ){
+        likeService.cancelCommentLike(commentId, likeId, DUMMY_USER_ID);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

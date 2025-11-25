@@ -2,6 +2,8 @@ package com.newsfeed.domain.like.service;
 
 import com.newsfeed.common.exception.ErrorCode;
 import com.newsfeed.common.exception.UnauthorizedException;
+import com.newsfeed.domain.comment.entity.Comment;
+import com.newsfeed.domain.comment.repository.CommentRepository;
 import com.newsfeed.domain.like.entity.Like;
 import com.newsfeed.domain.like.repository.LikeRepository;
 import com.newsfeed.domain.newsfeed.entity.Newsfeed;
@@ -19,6 +21,7 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
     private final NewsfeedRepository newsfeedRepository;
+    private final CommentRepository commentRepository;
 
     public void addNewsfeedLike(Long newsfeedId, Long userId){
         User user = userRepository.findOrThrow(userId);
@@ -39,6 +42,33 @@ public class LikeService {
 
         // like가 요청한 newsfeedid에 속하는지 검증
         if(!like.getNewsfeed().getId().equals(newsfeed.getId())) {
+            throw new UnauthorizedException(ErrorCode.FORBIDDEN);
+        }
+        //현재 로그인 한 userid와 like.user.id가 같은지
+        if(!like.getUser().getId().equals(user.getId())) {
+            throw new UnauthorizedException(ErrorCode.FORBIDDEN);
+        }
+        likeRepository.deleteById(likeId);
+    }
+
+    public void addCommentLike(Long commentId, Long userId) {
+        User user = userRepository.findOrThrow(userId);
+        Comment comment = commentRepository.findOrThrow(commentId);
+        Like like = new Like(
+                user,
+                null,
+                comment
+        );
+        likeRepository.save(like);
+    }
+
+    public void cancelCommentLike(Long commentId, Long likeId, Long userId) {
+        Comment comment = commentRepository.findOrThrow(commentId);
+        Like like = likeRepository.findOrThrow(likeId);
+        User user = userRepository.findOrThrow(userId);
+
+        // like가 요청한 commentid에 속하는지 검증
+        if(!like.getComment().getId().equals(comment.getId())) {
             throw new UnauthorizedException(ErrorCode.FORBIDDEN);
         }
         //현재 로그인 한 userid와 like.user.id가 같은지
