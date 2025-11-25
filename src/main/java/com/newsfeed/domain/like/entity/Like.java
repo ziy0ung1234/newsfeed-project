@@ -1,7 +1,7 @@
 package com.newsfeed.domain.like.entity;
 
 import com.newsfeed.common.entity.*;
-import com.newsfeed.common.entity.Comment;
+import com.newsfeed.domain.comment.entity.Comment;
 import com.newsfeed.domain.newsfeed.entity.Newsfeed;
 import com.newsfeed.domain.user.entity.User;
 import jakarta.persistence.*;

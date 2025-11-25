@@ -1,5 +1,7 @@
-package com.newsfeed.common.entity;
+package com.newsfeed.domain.comment.entity;
 
+import com.newsfeed.common.entity.BaseDateEntity;
+import com.newsfeed.domain.comment.dto.CommentPutRequest;
 import com.newsfeed.domain.newsfeed.entity.Newsfeed;
 import com.newsfeed.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -9,7 +11,7 @@ import lombok.*;
 @Entity
 @Table(name="comments")
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
-public class Comment extends BaseDateEntity{
+public class Comment extends BaseDateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,4 +42,7 @@ public class Comment extends BaseDateEntity{
 
     }
 
+    public void update(CommentPutRequest req) {
+        this.content = req.getContent() != null ? req.getContent() : this.content;
+    }
 }

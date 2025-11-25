@@ -4,9 +4,11 @@ import com.newsfeed.domain.comment.entity.Comment;
 import lombok.Getter;
 
 @Getter
-public class CommentCreateRes {
+public class CommentPutResponse {
+    private final Long id;
     private final String content;
-    public CommentCreateRes(Comment comment) {
+    public CommentPutResponse(Comment comment) {
+        this.id = comment.getId();
         this.content = comment.getContent();
     }
 }
