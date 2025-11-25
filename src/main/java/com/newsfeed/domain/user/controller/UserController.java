@@ -1,10 +1,14 @@
 package com.newsfeed.domain.user.controller;
 
+import com.newsfeed.common.exception.LoginFailException;
+import com.newsfeed.domain.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.newsfeed.common.exception.ErrorCode.LOGIN_REQUIRED;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,13 +19,13 @@ public class UserController {
     private final JwtProvider jwtProvider;
 
     //프로필 조회
-    @GetMapping("/me")
-    public ResponseEntity<GlobalResponse<MyInfoResponse>> myInfo(HttpServletRequest request) {
+    @GetMapping("{targetId}")
+    public ResponseEntity<GlobalResponse<UserInfoResponse>> userInfo(HttpServletRequest loginId, @PathVariable Long targetId) {
 
         // 1. Authorization 헤더 체크
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = loginId.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("로그인이 유효 하지 않습니다.");
+            throw new LoginFailException(LOGIN_REQUIRED);
         }
 
         // 2. 토큰 추출
@@ -31,7 +35,7 @@ public class UserController {
         Long userId = jwtProvider.getUserIdFromToken(token);
 
         // 4. 서비스 호출
-        return ResponseEntity.ok(userService.myInfo(userId));
+        return ResponseEntity.ok(userService.userInfo(userId, targetId));
     }
 
     //정보 수정
@@ -40,7 +44,7 @@ public class UserController {
         // 1. Authorization 헤더 체크
         String authHeader = tokenRequest.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("로그인이 유효 하지 않습니다.");
+            throw new LoginFailException(LOGIN_REQUIRED);
         }
 
         // 2. 토큰 추출
@@ -59,7 +63,7 @@ public class UserController {
         // 1. Authorization 헤더 체크
         String authHeader = tokenRequest.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("로그인이 유효 하지 않습니다.");
+            throw new LoginFailException(LOGIN_REQUIRED);
         }
 
         // 2. 토큰 추출
@@ -78,7 +82,9 @@ public class UserController {
 //
 //        // 1. Authorization 헤더 체크
 //        String authHeader = request.getHeader("Authorization");
-//        if (authHeader == null || !authHeader.startsWith("Bearer ")) { throw new IllegalArgumentException("로그인이 유효 하지 않습니다."); }
+//        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+//        throw new LoginFailException(LOGIN_REQUIRED);
+//        }
 //
 //        // 2. 토큰 추출
 //        String token = authHeader.replace("Bearer ", "");
