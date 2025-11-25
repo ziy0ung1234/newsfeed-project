@@ -1,6 +1,6 @@
-package com.newsfeed.comment;
+package com.newsfeed.domain.comment;
 
-import com.newsfeed.comment.dto.CommentCreateReq;
+import com.newsfeed.domain.comment.dto.CommentCreateReq;
 import com.newsfeed.common.response.GlobalResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.newsfeed.comment.dto;
+package com.newsfeed.domain.comment.dto;
 
 import lombok.Getter;
 

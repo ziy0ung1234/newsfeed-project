@@ -1,5 +1,7 @@
-package com.newsfeed.common.entity;
+package com.newsfeed.domain.newsfeed.entity;
 
+import com.newsfeed.common.entity.BaseDateEntity;
+import com.newsfeed.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,7 +9,7 @@ import lombok.*;
 @Entity
 @Table(name="newsfeeds")
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
-public class Newsfeed extends BaseDateEntity{
+public class Newsfeed extends BaseDateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,11 +22,11 @@ public class Newsfeed extends BaseDateEntity{
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="user_id",  nullable=false)
-    private User userId;
+    private User user;
 
-    public Newsfeed(Newsfeed newsfeed,  User userId) {
-        this.title = newsfeed.getTitle();
-        this.content = newsfeed.getContent();
-        this.userId = userId;
+    public Newsfeed(String title, String content, User user) {
+        this.title = title;
+        this.content = content;
+        this.user = user;
     }
 }

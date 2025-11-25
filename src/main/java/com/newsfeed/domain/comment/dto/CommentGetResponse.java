@@ -1,8 +1,8 @@
-package com.newsfeed.comment.dto;
+package com.newsfeed.domain.comment.dto;
 
 import com.newsfeed.common.entity.Comment;
-import com.newsfeed.common.entity.Newsfeed;
-import com.newsfeed.common.entity.User;
+import com.newsfeed.domain.newsfeed.entity.Newsfeed;
+import com.newsfeed.domain.user.entity.User;
 import lombok.Getter;
 
 @Getter

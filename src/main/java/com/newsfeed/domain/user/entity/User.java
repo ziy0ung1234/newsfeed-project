@@ -1,5 +1,6 @@
-package com.newsfeed.common.entity;
+package com.newsfeed.domain.user.entity;
 
+import com.newsfeed.common.entity.BaseDateEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,7 +8,7 @@ import lombok.*;
 @Entity
 @Table(name="users")
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseDateEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
@@ -24,11 +25,10 @@ public class User {
     @Column(nullable = false,  unique = true, length = 30)
     private String cellPhoneNumber;
 
-    public User(User user) {
-        this.id = user.getId();
-        this.username = user.getUsername();
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.cellPhoneNumber = user.getCellPhoneNumber();
+    public User(String username, String email, String password, String cellPhoneNumber) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.cellPhoneNumber = cellPhoneNumber;
     }
 }

@@ -1,17 +1,18 @@
-package com.newsfeed.comment;
+package com.newsfeed.domain.comment;
 
-import com.newsfeed.comment.dto.CommentCreateReq;
-import com.newsfeed.comment.dto.CommentCreateRes;
-import com.newsfeed.comment.dto.CommentGetResponse;
+import com.newsfeed.domain.comment.dto.CommentCreateReq;
+import com.newsfeed.domain.comment.dto.CommentCreateRes;
+import com.newsfeed.domain.comment.dto.CommentGetResponse;
 import com.newsfeed.common.entity.Comment;
-import com.newsfeed.common.entity.Newsfeed;
-import com.newsfeed.common.entity.User;
+
 import com.newsfeed.common.exception.ErrorCode;
 import com.newsfeed.common.exception.NotFoundException;
-import com.newsfeed.common.repository.CommentRepository;
-import com.newsfeed.common.repository.NewsfeedRepository;
-import com.newsfeed.common.repository.UserRepository;
 import com.newsfeed.common.response.GlobalResponse;
+import com.newsfeed.domain.comment.repository.CommentRepository;
+import com.newsfeed.domain.newsfeed.entity.Newsfeed;
+import com.newsfeed.domain.newsfeed.repository.NewsfeedRepository;
+import com.newsfeed.domain.user.entity.User;
+import com.newsfeed.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 

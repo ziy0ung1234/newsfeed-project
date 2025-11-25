@@ -1,5 +1,7 @@
 package com.newsfeed.common.entity;
 
+import com.newsfeed.domain.newsfeed.entity.Newsfeed;
+import com.newsfeed.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
