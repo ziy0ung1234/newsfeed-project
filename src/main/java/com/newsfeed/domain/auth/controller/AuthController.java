@@ -29,7 +29,9 @@ public class AuthController {
 
         authService.signUp(request);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(GlobalResponse.successNodata(200, "회원가입이 완료되었습니다."));
     }
 
     @PostMapping("/login")
@@ -40,13 +42,17 @@ public class AuthController {
         // 클라이언트에 전달해줄 토큰 헤더에 담기
         response.setHeader("Authorization", "Bearer " + token.getAccessToken());
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(GlobalResponse.success(200, "로그인이 완료되었습니다.", token));
     }
 
     @DeleteMapping("/logout")
     public ResponseEntity<GlobalResponse<Void>> logout() {
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(GlobalResponse.successNodata(200, "로그아웃 완료"));
     }
 
     // 실행 예시 코드
@@ -62,7 +68,9 @@ public class AuthController {
 //        System.out.println(user.getEmail());
 //        System.out.println(user.getCellPhoneNumber());
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(GlobalResponse.success(200, "유저 정보 조회 성공", user));
     }
 
 }
