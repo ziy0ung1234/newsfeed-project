@@ -47,13 +47,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             Long userId = jwtProvider.getUserId(token);
             PrincipalDetails principalDetails = (PrincipalDetails) principalDetailsService.loadUserByUsername(String.valueOf(userId));
-//            User user = userRepository.findById(userId).orElse(null);
-
-//            if (user != null) {
-//                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, null);
-//
-//                SecurityContextHolder.getContext().setAuthentication(authentication);
-//            }
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(

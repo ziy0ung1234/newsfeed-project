@@ -1,9 +1,6 @@
 package com.newsfeed.domain.auth.service;
 
-import com.newsfeed.common.exception.ErrorCode;
-import com.newsfeed.common.exception.GlobalExceptionHandler;
-import com.newsfeed.common.exception.LoginFailException;
-import com.newsfeed.common.exception.SignUpFailException;
+import com.newsfeed.common.exception.*;
 import com.newsfeed.domain.auth.dto.LoginRequest;
 import com.newsfeed.domain.auth.dto.SignUpRequest;
 import com.newsfeed.domain.auth.dto.TokenResponse;
@@ -11,10 +8,8 @@ import com.newsfeed.domain.auth.jwt.JwtProvider;
 import com.newsfeed.domain.user.entity.User;
 import com.newsfeed.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -73,5 +68,4 @@ public class AuthService {
         System.out.println("유저 아이디 : " + userId);
         return new TokenResponse(token);
     }
-
 }

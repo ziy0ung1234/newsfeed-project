@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-// Jwt에서 userId를 꺼내고 DB에서 User을 찾고, PrincipalDetails로 감싸사 반환한다.
+// Jwt에서 userId를 꺼내고 DB에서 User을 찾고, PrincipalDetails로 감싸서 반환한다.
 @Service
 @RequiredArgsConstructor
 public class PrincipalDetailsService implements UserDetailsService {
