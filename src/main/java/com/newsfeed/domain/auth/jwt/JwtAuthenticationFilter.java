@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import static com.newsfeed.domain.auth.jwt.JwtConstants.*;
 
 import java.io.IOException;
 
@@ -59,17 +60,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // 토큰이 유효하지 않을 때 처리(후순위)
-        System.out.println("JWT token: " + token);
-        System.out.println("Valid: " + jwtProvider.validateToken(token));
 
         filterChain.doFilter(request, response);
 
     }
 
     private String resolveToken(HttpServletRequest request) {
-        String bearer = request.getHeader("Authorization");
+        String bearer = request.getHeader(AUTHORIZATION_HEADER);
 
-        if (bearer != null && bearer.startsWith("Bearer ")) {
+        if (bearer != null && bearer.startsWith(BEARER_PREFIX)) {
             return bearer.substring(7);
         }
 
