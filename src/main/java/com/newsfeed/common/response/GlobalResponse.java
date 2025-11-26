@@ -13,6 +13,7 @@ public class GlobalResponse<T> {
     private int status;
     private String message;
     private T data;
+
     //성공시
     public static <T> GlobalResponse<T> success(int status, String message, T data) {
         return new GlobalResponse<>(status, message, data);
@@ -24,9 +25,5 @@ public class GlobalResponse<T> {
     //성공했는데 응답데이터는 없을시
     public static GlobalResponse<Void> successNodata(int status, String message) {
         return new GlobalResponse<>(status, message, null);
-    }
-
-    public static Object success(UserInfoResponse response) {
-        return null;
     }
 }
