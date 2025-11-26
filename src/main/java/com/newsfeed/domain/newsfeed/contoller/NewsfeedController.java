@@ -5,6 +5,7 @@ import com.newsfeed.domain.auth.security.PrincipalDetails;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedRequest;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedResponse;
 import com.newsfeed.domain.newsfeed.service.NewsfeedService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class NewsfeedController {
 
     @PostMapping
     public ResponseEntity<GlobalResponse<NewsfeedResponse>> createNewsfeed(
-            @RequestBody NewsfeedRequest request,
+            @Valid @RequestBody NewsfeedRequest request,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return ResponseEntity.status(HttpStatus.CREATED).body(GlobalResponse.success(201,
                 "뉴스피드 생성완료",newsfeedService.saveNewsfeed(request, principalDetails)));
@@ -35,7 +36,7 @@ public class NewsfeedController {
 
     @PutMapping("/{newsfeedId}")
     public ResponseEntity<GlobalResponse<NewsfeedResponse>> updateNewsfeed(
-            @RequestBody NewsfeedRequest request,
+            @Valid @RequestBody NewsfeedRequest request,
             @PathVariable Long newsfeedId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return ResponseEntity.status(HttpStatus.OK).body(GlobalResponse.success(200
