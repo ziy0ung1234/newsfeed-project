@@ -4,6 +4,7 @@ import com.newsfeed.common.exception.ErrorCode;
 import com.newsfeed.common.exception.UnauthorizedException;
 import com.newsfeed.domain.comment.entity.Comment;
 import com.newsfeed.domain.comment.repository.CommentRepository;
+import com.newsfeed.domain.like.dto.response.GetCountResponse;
 import com.newsfeed.domain.like.entity.Like;
 import com.newsfeed.domain.like.repository.LikeRepository;
 import com.newsfeed.domain.newsfeed.entity.Newsfeed;
@@ -28,6 +29,7 @@ public class LikeService {
     private final NewsfeedRepository newsfeedRepository;
     private final CommentRepository commentRepository;
 
+    //------------------- 뉴스피드 ------------------------
     public void addNewsfeedLike(Long newsfeedId, Long userId){
         User user = userRepository.findOrThrow(userId);
         Newsfeed newsfeed = newsfeedRepository.findOrThrow(newsfeedId);
@@ -46,7 +48,8 @@ public class LikeService {
         User user = userRepository.findOrThrow(userId);
 
         // like가 요청한 newsfeedid에 속하는지 검증
-        if(!like.getNewsfeed().getId().equals(newsfeed.getId())) {
+        if(like.getComment() == null ||
+            !like.getNewsfeed().getId().equals(newsfeed.getId())) {
             throw new UnauthorizedException(ErrorCode.FORBIDDEN);
         }
         //현재 로그인 한 userid와 like.user.id가 같은지
@@ -56,6 +59,12 @@ public class LikeService {
         likeRepository.deleteById(likeId);
     }
 
+    public GetCountResponse getNewsfeedCount(Long newsfeedId, Long id) {
+        Long count = likeRepository.countByNewsfeed_Id(newsfeedId);
+        return new GetCountResponse(count);
+    }
+
+    //------------------ 댓글 좋아요 ---------------------
     public void addCommentLike(Long commentId, Long userId) {
         User user = userRepository.findOrThrow(userId);
         Comment comment = commentRepository.findOrThrow(commentId);
@@ -73,7 +82,8 @@ public class LikeService {
         User user = userRepository.findOrThrow(userId);
 
         // like가 요청한 commentid에 속하는지 검증
-        if(!like.getComment().getId().equals(comment.getId())) {
+        if(like.getComment() == null ||
+            !like.getComment().getId().equals(comment.getId())) {
             throw new UnauthorizedException(ErrorCode.FORBIDDEN);
         }
         //현재 로그인 한 userid와 like.user.id가 같은지
@@ -81,5 +91,10 @@ public class LikeService {
             throw new UnauthorizedException(ErrorCode.FORBIDDEN);
         }
         likeRepository.deleteById(likeId);
+    }
+
+    public GetCountResponse getCommentCount(Long newsfeedId, Long id) {
+        Long count = likeRepository.countByComment_Id(newsfeedId);
+        return new GetCountResponse(count);
     }
 }
