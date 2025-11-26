@@ -44,7 +44,7 @@ public class NewsfeedController {
     }
 
     @DeleteMapping("/{newsfeedId}")
-    public ResponseEntity<Void> deleteNewsfeed(@PathVariable Long newsfeedId, PrincipalDetails principalDetails) {
+    public ResponseEntity<Void> deleteNewsfeed(@PathVariable Long newsfeedId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         newsfeedService.deleteNewsfeed(newsfeedId, principalDetails);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
