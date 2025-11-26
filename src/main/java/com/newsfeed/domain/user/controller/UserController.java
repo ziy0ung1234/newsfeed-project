@@ -13,7 +13,6 @@ import com.newsfeed.domain.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +36,7 @@ public class UserController {
     }
 
     //프로필 조회
-    @GetMapping("{targetId}")
+    @GetMapping("/{id}")
     public ResponseEntity<GlobalResponse<UserInfoResponse>> userInfo(HttpServletRequest request, @PathVariable Long targetId) {
             Long userId = getUserId(request);
             UserInfoResponse response = userService.userInfo(userId, targetId);
