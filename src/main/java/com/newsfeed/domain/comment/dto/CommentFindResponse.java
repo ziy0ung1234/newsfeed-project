@@ -4,12 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.newsfeed.domain.comment.entity.Comment;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CommentWithChildrenResponse {
+public class CommentFindResponse {
     private final Long id;
     private final String userName;
     private final Long newsfeedId;
@@ -17,7 +14,7 @@ public class CommentWithChildrenResponse {
     private final int depth;
     private final Long parentCommentId;
 
-    public CommentWithChildrenResponse(Comment comment) {
+    public CommentFindResponse(Comment comment) {
         this.id = comment.getId();
         this.content = comment.getContent();
         this.depth = comment.getDepth();
@@ -25,5 +22,4 @@ public class CommentWithChildrenResponse {
         this.userName = comment.getUserId().getUsername();
         this.newsfeedId = comment.getNewsfeedId().getId();
     }
-
 }
