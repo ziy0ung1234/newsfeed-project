@@ -8,8 +8,11 @@ import com.newsfeed.domain.auth.security.PrincipalDetails;
 import com.newsfeed.domain.auth.service.AuthService;
 import com.newsfeed.domain.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,28 +25,28 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public GlobalResponse<Void> signUp(@RequestBody SignUpRequest request) {
+    public ResponseEntity<GlobalResponse<Void>> signUp(@Valid @RequestBody SignUpRequest request) {
 
         authService.signUp(request);
 
-        return GlobalResponse.success(200, "회원가입이 완료되었습니다.", null);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/login")
-    public GlobalResponse<TokenResponse> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<GlobalResponse<TokenResponse>> login(@RequestBody LoginRequest request, HttpServletResponse response) {
 
         TokenResponse token = authService.login(request);
 
         // 클라이언트에 전달해줄 토큰 헤더에 담기
         response.setHeader("Authorization", "Bearer " + token.getAccessToken());
 
-        return GlobalResponse.success(200, "로그인이 완료되었습니다.", null);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/logout")
-    public GlobalResponse<Void> logout() {
+    public ResponseEntity<GlobalResponse<Void>> logout() {
 
-        return GlobalResponse.successNodata(200, "로그아웃 완료");
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     // 실행 예시 코드
@@ -51,7 +54,7 @@ public class AuthController {
     // 2. 그러면 Spring Security 저장소에서 PrincipalDetails 객체에 User 객체를 담아서 넘겨준다.
     // 3. 그러면 principalDetails 객체 안에있는 getter로 유저 정보를 갖다 쓰면 된다.
     @GetMapping("/me")
-    public GlobalResponse<User> getMe(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<GlobalResponse<User>> getMe(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         User user = principalDetails.getUser();
 //        System.out.println(user);
@@ -59,7 +62,7 @@ public class AuthController {
 //        System.out.println(user.getEmail());
 //        System.out.println(user.getCellPhoneNumber());
 
-        return GlobalResponse.success(200, "유저 정보", user);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }
