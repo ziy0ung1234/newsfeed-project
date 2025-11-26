@@ -11,10 +11,12 @@ import lombok.Getter;
 public class SignUpRequest {
 
     @NotBlank(message = "이름은 필수 입력 값입니다.")
+    @Size(max = 30, message = "이름은 30자 이하로 입력해주세요.")
     private String username;
 
     @Email
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
+    @Size(max = 30, message = "이메일은 30자 이하로 입력해주세요.")
     private String email;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
