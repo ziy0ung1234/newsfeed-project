@@ -4,16 +4,21 @@ import com.newsfeed.domain.user.entity.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 비밀번호 변경 결과를 내려주는 Response DTO
+ * - 변경된 유저의 ID만 응답한다
+ */
 @Getter
 @RequiredArgsConstructor
 public class UpdatePasswordResponse {
 
     private Long id;
-    private String message;
+
+    public UpdatePasswordResponse(Long id) {
+        this.id = id;
+    }
 
     public static UpdatePasswordResponse of(User user) {
-        return new UpdatePasswordResponse(
-                user.getId(),
-                "비밀번호 변경 완료");
+        return new UpdatePasswordResponse(user.getId());
     }
 }

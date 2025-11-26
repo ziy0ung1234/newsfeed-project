@@ -5,6 +5,11 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+/**
+ * 사용자 정보 수정 응답 DTO
+ * - 수정 후 최신 사용자 상태를 반환한다.
+ * - 엔티티 노출 방지를 위해 필요한 필드만 제공한다.
+ */
 @Getter
 public class UpdateResponse {
 

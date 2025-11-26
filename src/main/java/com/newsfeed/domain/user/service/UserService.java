@@ -1,8 +1,7 @@
 package com.newsfeed.domain.user.service;
 
-import com.newsfeed.common.exception.PasswordException;
+import com.newsfeed.common.exception.NotFoundException;
 import com.newsfeed.common.exception.UserNotFoundException;
-import com.newsfeed.domain.user.dto.deleteResponse.DeleteResponse;
 import com.newsfeed.domain.user.dto.updateDto.UpdateRequest;
 import com.newsfeed.domain.user.dto.updateDto.UpdateResponse;
 import com.newsfeed.domain.user.dto.updatePasswordDto.UpdatePasswordRequest;
@@ -16,6 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.newsfeed.common.exception.ErrorCode.*;
 
+
+/**
+ * UserService
+ * - 유저 정보 조회, 수정, 비밀번호 변경, 탈퇴 등
+ * - 사용자 관련 핵심 비즈니스 로직을 담당하는 서비스 레이어
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -24,9 +29,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     /**
-     * 유저 프로필 조회
-     * - targetId : 조회하고 싶은 유저
-     * - userId : 로그인 유저
+     * 유저 프로필 조회 (본인/타인 구분)
      */
     public UserInfoResponse userInfo(Long userId, Long targetId) {
         if (userId == null) throw new UserNotFoundException(LOGIN_REQUIRED);
@@ -44,7 +47,7 @@ public class UserService {
 
 
     /**
-     * 내 정보 수정
+     * 내 정보 수정(이메일,유저이름,휴대폰번호 수정가능)
      */
     public UpdateResponse update(Long userId, UpdateRequest upRequest) {
         if (userId == null) throw new UserNotFoundException(LOGIN_REQUIRED);
@@ -66,21 +69,21 @@ public class UserService {
 
 
     /**
-     * 비밀번호 수정
+     * 비밀번호 변경
      */
     public UpdatePasswordResponse updatePassword(Long userId, UpdatePasswordRequest pwRequest) {
         if (userId == null) throw new UserNotFoundException(LOGIN_REQUIRED);
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
         if (!user.getPassword().equals(pwRequest.getCurrentPassword())) {
-            throw new PasswordException(USER_PASSWORD_NOT_FOUND);
+            throw new NotFoundException(PASSWORD_NOT_MATCH);
         }
 
-        if (pwRequest.getNwePassword().equals(pwRequest.getCurrentPassword())) {
-            throw new PasswordException(PASSWORD_SAME);
+        if (pwRequest.getNewPassword().equals(pwRequest.getCurrentPassword())) {
+            throw new NotFoundException(INVALID_PASSWORD);
         }
 
-        user.setPassword(pwRequest.getNwePassword());
+        user.setPassword(pwRequest.getNewPassword());
         return UpdatePasswordResponse.of(user);
     }
 
@@ -88,14 +91,13 @@ public class UserService {
     /**
      * 회원 탈퇴
      */
-    public DeleteResponse delete(Long userId) {
+    public void delete(Long userId) {
         if (userId == null) throw new UserNotFoundException(LOGIN_REQUIRED);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
         userRepository.delete(user);
-        return DeleteResponse.of(user.getId(),"회원 탈퇴 완료");
     }
 
 }
