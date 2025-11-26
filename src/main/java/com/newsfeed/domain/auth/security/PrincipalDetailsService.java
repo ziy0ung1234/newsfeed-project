@@ -1,5 +1,7 @@
 package com.newsfeed.domain.auth.security;
 
+import com.newsfeed.common.exception.ErrorCode;
+import com.newsfeed.common.exception.NotFoundException;
 import com.newsfeed.domain.user.entity.User;
 import com.newsfeed.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         User user = userRepository.findById(Long.parseLong(userId))
-                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
 
         return new PrincipalDetails(user);
     }
