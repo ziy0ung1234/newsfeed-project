@@ -24,4 +24,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(GlobalResponse.exception(e.getErrorCode()));
     }
 
+    @ExceptionHandler(SignUpFailException.class)
+    public ResponseEntity<GlobalResponse<Void>> signUpFailException(SignUpFailException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(GlobalResponse.exception(e.getErrorCode()));
+    }
 }
