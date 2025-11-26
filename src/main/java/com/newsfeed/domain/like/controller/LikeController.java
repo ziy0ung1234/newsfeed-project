@@ -1,10 +1,12 @@
 package com.newsfeed.domain.like.controller;
 
 import com.newsfeed.common.response.GlobalResponse;
+import com.newsfeed.domain.auth.security.PrincipalDetails;
 import com.newsfeed.domain.like.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,32 +20,47 @@ import org.springframework.web.bind.annotation.*;
 public class LikeController {
     private final LikeService likeService;
 
-    private static final Long DUMMY_USER_ID = 10L;
 
     @PostMapping("/newsfeeds/{newsfeedId}/likes")
-    public ResponseEntity<GlobalResponse<Void>> addNewsfeedLike(@PathVariable Long newsfeedId){
-        likeService.addNewsfeedLike(newsfeedId, DUMMY_USER_ID);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<GlobalResponse<Void>> addNewsfeedLike(
+            @PathVariable Long newsfeedId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        likeService.addNewsfeedLike(newsfeedId, principalDetails.getUser().getId());
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(GlobalResponse.successNodata(HttpStatus.NO_CONTENT.value(), "뉴스피드 좋아요 생성"));
     }
     @DeleteMapping("/newsfeeds/{newsfeedId}/likes/{likeId}")
     public ResponseEntity<GlobalResponse<Void>> cancelNewsfeedLike(
             @PathVariable Long newsfeedId,
-            @PathVariable Long likeId
+            @PathVariable Long likeId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
-        likeService.cancelNewsfeedLike(newsfeedId, likeId, DUMMY_USER_ID);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        likeService.cancelNewsfeedLike(newsfeedId, likeId, principalDetails.getUser().getId());
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(GlobalResponse.successNodata(HttpStatus.NO_CONTENT.value(), "뉴스피드 좋아요 취소"));
     }
     @PostMapping("/comments/{commentId}/likes")
-    public ResponseEntity<GlobalResponse<Void>> addCommentLike(@PathVariable Long commentId){
-        likeService.addCommentLike(commentId, DUMMY_USER_ID);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<GlobalResponse<Void>> addCommentLike(
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        likeService.addCommentLike(commentId, principalDetails.getUser().getId());
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(GlobalResponse.successNodata(HttpStatus.NO_CONTENT.value(), "댓글 좋아요 생성"));
     }
     @DeleteMapping("/comments/{commentId}/likes/{likeId}")
     public ResponseEntity<GlobalResponse<Void>> cancelCommentLike(
             @PathVariable Long commentId,
-            @PathVariable Long likeId
+            @PathVariable Long likeId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
-        likeService.cancelCommentLike(commentId, likeId, DUMMY_USER_ID);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        likeService.cancelCommentLike(commentId, likeId, principalDetails.getUser().getId());
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(GlobalResponse.successNodata(HttpStatus.NO_CONTENT.value(), "댓글 좋아요 생성"));
     }
 }

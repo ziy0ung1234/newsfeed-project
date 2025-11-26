@@ -13,6 +13,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(404, "없는 유저입니다"),
     NEWSFEED_NOT_FOUND(404, "없는 피드입니다"),
     COMMENT_NOT_FOUND(404, "없는 댓글입니다"),
+    LIKE_NOT_FOUND(404, "취소할 좋아요가 없습니다."),
     //------403-----------------------
     USER_NOT_MATCH(403, "접근 권한이 없습니다"),
     PASSWORD_NOT_MATCH(403, "비밀번호가 일치하지 않습니다."),
