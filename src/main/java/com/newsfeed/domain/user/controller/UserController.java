@@ -17,15 +17,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * 유저 관련 API 컨트롤러.
- * 프로필 조회, 정보 수정, 비밀번호 변경, 회원 탈퇴 기능을 제공한다.
- * 인증 정보는 @AuthenticationPrincipal 로 받아 처리한다.
- */
-@RestController
-@RequiredArgsConstructor
-@RequestMapping("/users")
-public class UserController {
+    /**
+     * 유저 관련 API 컨트롤러.
+     * 프로필 조회, 정보 수정, 비밀번호 변경, 회원 탈퇴 기능을 제공한다.
+     * 인증 정보는 @AuthenticationPrincipal 로 받아 처리한다.
+     */
+    @RestController
+    @RequiredArgsConstructor
+    @RequestMapping("/users")
+    public class UserController {
 
     private final UserService userService;
 

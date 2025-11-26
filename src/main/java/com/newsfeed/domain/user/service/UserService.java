@@ -87,7 +87,6 @@ public class UserService {
         return UpdatePasswordResponse.of(user);
     }
 
-
     /**
      * 회원 탈퇴
      */
