@@ -22,14 +22,14 @@ public class Controller {
     public ResponseEntity<GlobalResponse<CommentCreateRes>> postApi(@PathVariable Long newsfeedId, @PathVariable(required = false) Long commentId, @RequestBody CommentCreateReq req) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(HttpStatus.CREATED.value(),"postResponse",req,newsfeedId,commentId));
     }
-    @GetMapping("/comments")
-    public ResponseEntity<GlobalResponse<List<CommentWithChildrenResponse>>> getApi() {
-        return ResponseEntity.status(HttpStatus.OK).body(service.find(HttpStatus.CREATED.value(),"getResponse"));
+    @GetMapping("newsfeeds/{newsfeedId}/comments")
+    public ResponseEntity<GlobalResponse<List<CommentWithChildrenResponse>>> getFromNewsfeedsComments(@PathVariable Long newsfeedId) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getFromNewsfeedsComments(HttpStatus.OK.value(),"getResponse", newsfeedId));
     }
 
     @GetMapping("/comments/{commentId}")
-    public ResponseEntity<GlobalResponse<CommentWithChildrenResponse>> getDetailApi(@PathVariable Long commentId) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.findDetail(HttpStatus.CREATED.value(),"getResponse", commentId));
+    public ResponseEntity<GlobalResponse<List<CommentWithChildrenResponse>>> getFromCommentsChildren(@PathVariable Long commentId) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getFromCommentsChildren(HttpStatus.OK.value(),"getResponse", commentId));
     }
 
     @PutMapping("/comments/{commentId}")

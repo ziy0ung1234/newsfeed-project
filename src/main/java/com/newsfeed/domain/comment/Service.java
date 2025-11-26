@@ -25,6 +25,7 @@ public class Service {
     private final NewsfeedRepository newsfeedRepository;
     private final UserRepository userRepository;
 
+    //댓글 생성
     public GlobalResponse<CommentCreateRes> create(int status, String message, CommentCreateReq req, Long newsfeedId, Long parentCommentId) {
 
         Newsfeed newsfeed = newsfeedRepository.findById(newsfeedId)
@@ -41,6 +42,7 @@ public class Service {
         if (!(parentCommentId == null)) {
             parentComment = commentRepository.findById(parentCommentId)
                     .orElseThrow(() -> new NotFoundException(ErrorCode.COMMENT_NOT_FOUND));
+            //대대댓글 이상의 기능 방지
             if (parentComment.getDepth() >= 1) {
                 throw new NotFoundException(ErrorCode.USER_NOT_MATCH);
             }
@@ -58,42 +60,41 @@ public class Service {
         return GlobalResponse.success(status, message, res);
     }
 
-    public GlobalResponse<List<CommentWithChildrenResponse>> find(int status, String message) {
+    //게시글에 대한 부모계층 댓글 조회
+    public GlobalResponse<List<CommentWithChildrenResponse>> getFromNewsfeedsComments(int status, String message,Long newsfeedId) {
+
+            Newsfeed newsfeed = newsfeedRepository.findById(newsfeedId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NEWSFEED_NOT_FOUND));
+
             List<Comment> comments = commentRepository.findAll();
 
             List<CommentWithChildrenResponse> data = new ArrayList<>();
 
             for (Comment comment : comments) {
-                if (comment.getParentCommentId() == null) {
+                if (comment.getParentCommentId() == null && comment.getNewsfeedId().getId().equals(newsfeedId)) {
                     data.add(new CommentWithChildrenResponse(comment));
-                } else {
-                    data.stream()
-                            .filter(c -> c.getId().equals(comment.getParentCommentId().getId()))
-                            .findFirst()
-                            .ifPresent(parent -> parent.addChild(new CommentWithChildrenResponse(comment)));
                 }
             }
 
             return GlobalResponse.success(status, message, data);
     }
 
-    public GlobalResponse<CommentWithChildrenResponse> findDetail(int status, String message, Long commentId) {
+    //댓글에 대한 대댓글 조회
+    public GlobalResponse<List<CommentWithChildrenResponse>> getFromCommentsChildren(int status, String message, Long commentId) {
 
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
         List<Comment> children = commentRepository.findByParentCommentId_Id(comment.getId());
-
-        CommentWithChildrenResponse data = new CommentWithChildrenResponse(comment);
-
+        List<CommentWithChildrenResponse> data = new ArrayList<>();
         for (Comment child : children) {
-            CommentWithChildrenResponse c = new CommentWithChildrenResponse(child);
-            data.addChild(c);
+            data.add(new CommentWithChildrenResponse(child));
         }
 
         return GlobalResponse.success(status, message, data);
     }
 
+    //댓글 수정
     public GlobalResponse<CommentPutResponse> update(int status, String message,Long commentId ,CommentPutRequest req) {
 
         Comment comment = commentRepository
@@ -106,6 +107,7 @@ public class Service {
         return GlobalResponse.success(status, message, data);
     }
 
+    //댓글 삭제
     public GlobalResponse<Void> delete(int status, String message, Long commentId) {
         Comment comment = commentRepository
                 .findById(commentId)

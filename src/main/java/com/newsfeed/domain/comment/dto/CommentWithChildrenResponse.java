@@ -16,7 +16,6 @@ public class CommentWithChildrenResponse {
     private final String content;
     private final int depth;
     private final Long parentCommentId;
-    private List<CommentWithChildrenResponse> children = new ArrayList<>();
 
     public CommentWithChildrenResponse(Comment comment) {
         this.id = comment.getId();
@@ -27,7 +26,4 @@ public class CommentWithChildrenResponse {
         this.newsfeedId = comment.getNewsfeedId().getId();
     }
 
-    public void addChild(CommentWithChildrenResponse children) {
-        this.children.add(children);
-    }
 }
