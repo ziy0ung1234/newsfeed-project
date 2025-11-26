@@ -24,7 +24,7 @@ import static com.newsfeed.common.exception.ErrorCode.LOGIN_REQUIRED;
 public class UserController {
 
     private final UserService userService;
-    private final JwtProvider jwtProvider;
+//    private final JwtProvider jwtProvider;
 
     private Long getUserId(HttpServletRequest loginId) {
         String authHeader = loginId.getHeader("Authorization");
@@ -32,7 +32,8 @@ public class UserController {
             throw new LoginFailException(LOGIN_REQUIRED);
         }
         String token = authHeader.substring(7);
-        return jwtProvider.getUserIdFromToken(token);
+        return null;
+//                jwtProvider.getUserIdFromToken(token);
     }
 
     //프로필 조회
