@@ -15,4 +15,6 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
         return findById(likeId)
                 .orElseThrow(()-> new NotFoundException(ErrorCode.LIKE_NOT_FOUND));
     }
+    Long countByNewsfeed_Id(Long newsfeedId);
+    Long countByComment_Id(Long commentId);
 }
