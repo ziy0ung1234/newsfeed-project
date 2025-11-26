@@ -23,6 +23,12 @@ public enum ErrorCode {
     INVALID_PASSWORD_FORMAT(400, "비밀번호 형식이 올바르지 않습니다."),
     INVALID_PASSWORD(400, "기존 비밀번호와 동일합니다.");
 
+    LOGIN_REQUIRED(401, "로그인한 유저만 사용할 수 있는 기능입니다"),
+    //------400-----------------------
+    INVALID_EMAIL_FORMAT(400, "이메일 형식이 올바르지 않습니다."),
+    INVALID_PASSWORD_FORMAT(400, "비밀번호 형식이 올바르지 않습니다."),
+    INVALID_PASSWORD(400, "비밀번호가 일치하지 않습니다.");
+
 
     private final int status;
     private final String message;
