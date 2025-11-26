@@ -63,10 +63,6 @@ public class AuthController {
     public ResponseEntity<GlobalResponse<User>> getMe(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         User user = principalDetails.getUser();
-//        System.out.println(user);
-//        System.out.println(user.getId());
-//        System.out.println(user.getEmail());
-//        System.out.println(user.getCellPhoneNumber());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
