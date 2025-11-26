@@ -25,6 +25,11 @@ public class AuthService {
             throw new SignUpFailException(ErrorCode.USER_ALREADY_EXISTS);
         }
 
+        // 중복 전화번호 체크
+        if (userRepository.existsByCellPhoneNumber(request.getCellPhoneNumber())) {
+            throw new SignUpFailException(ErrorCode.CELLPHONENUMBER_ALREADY_EXISTS);
+        }
+
         User user = new User(
                 request.getUsername(),
                 request.getEmail(),
