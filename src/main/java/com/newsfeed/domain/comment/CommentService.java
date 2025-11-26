@@ -12,15 +12,16 @@ import com.newsfeed.domain.newsfeed.repository.NewsfeedRepository;
 import com.newsfeed.domain.user.entity.User;
 import com.newsfeed.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@org.springframework.stereotype.Service
+@Service
 @RequiredArgsConstructor
 @Transactional
-public class Service {
+public class CommentService {
     private final CommentRepository commentRepository;
     private final NewsfeedRepository newsfeedRepository;
     private final UserRepository userRepository;

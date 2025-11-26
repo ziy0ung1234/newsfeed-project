@@ -13,8 +13,8 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class Controller {
-    private final Service service;
+public class CommentController {
+    private final CommentService service;
     @PostMapping({
             "/newsfeeds/{newsfeedId}/comments",
             "/newsfeeds/{newsfeedId}/comments/{commentId}"
