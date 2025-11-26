@@ -1,5 +1,6 @@
 package com.newsfeed.domain.newsfeed.contoller;
 
+import com.newsfeed.common.response.GlobalResponse;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedRequest;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedResponse;
 import com.newsfeed.domain.newsfeed.service.NewsfeedService;
@@ -40,5 +41,10 @@ public class NewsfeedController {
     public ResponseEntity<Void> deleteNewsfeed(@PathVariable Long newsfeedId) {
         newsfeedService.deleteNewsfeed(newsfeedId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping({("/"),("/{userName}")})
+    public ResponseEntity<GlobalResponse<?>> searchNewsfeed(@PathVariable String userName) {
+        return ResponseEntity.status(HttpStatus.OK).body(newsfeedService.search(HttpStatus.OK.value(),"searchResponse",userName));
     }
 }

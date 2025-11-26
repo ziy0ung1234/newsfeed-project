@@ -1,6 +1,7 @@
 package com.newsfeed.domain.newsfeed.service;
 
 import com.newsfeed.common.exception.NotFoundException;
+import com.newsfeed.common.response.GlobalResponse;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedRequest;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedResponse;
 import com.newsfeed.domain.newsfeed.entity.Newsfeed;
@@ -104,5 +105,12 @@ public class NewsfeedService {
         }
         // 뉴스피드 삭제
         newsfeedRepository.deleteById(newsfeedId);
+    }
+
+    @Transactional(readOnly = true)
+    public GlobalResponse<?> search(int status, String message, String userName) {
+//        newsfeedRepository.findB
+
+        return null;
     }
 }
