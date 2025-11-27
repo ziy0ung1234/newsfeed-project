@@ -1,19 +1,32 @@
 package com.newsfeed.domain.newsfeed.service;
 
+import com.newsfeed.common.exception.ErrorCode;
 import com.newsfeed.common.exception.NotFoundException;
 import com.newsfeed.common.response.GlobalResponse;
 import com.newsfeed.domain.auth.security.PrincipalDetails;
 import com.newsfeed.common.response.GlobalResponse;
+import com.newsfeed.domain.like.entity.Like;
+import com.newsfeed.domain.like.repository.LikeRepository;
+import com.newsfeed.domain.newsfeed.dto.NewsfeedLikeResponse;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedRequest;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedResponse;
 import com.newsfeed.domain.newsfeed.entity.Newsfeed;
 import com.newsfeed.domain.newsfeed.repository.NewsfeedRepository;
 import com.newsfeed.domain.user.entity.User;
+import com.newsfeed.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+
 import static com.newsfeed.common.exception.ErrorCode.NEWSFEED_NOT_FOUND;
 
 
@@ -23,6 +36,8 @@ import static com.newsfeed.common.exception.ErrorCode.NEWSFEED_NOT_FOUND;
 public class NewsfeedService {
 
     private final NewsfeedRepository newsfeedRepository;
+    private final LikeRepository likeRepository;
+    private final UserRepository userRepository;
 
 
     @Transactional
@@ -121,9 +136,75 @@ public class NewsfeedService {
     }
 
     @Transactional(readOnly = true)
-    public GlobalResponse<?> search(int status, String message, String userName) {
-//        newsfeedRepository.findB
+    public GlobalResponse<?> searchByUserName(
+            int status,
+            String message,
+            String userName,
+            PrincipalDetails principalDetails) {
+        User user = principalDetails.getUser();
+        User searchUser = userRepository.findByUsername(userName);
+        List<Newsfeed> lists = newsfeedRepository.findAllByUser(searchUser).orElseThrow(()-> new NotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        return null;
+            List<NewsfeedResponse> data = new ArrayList<>();
+        for (Newsfeed list : lists) {
+            data.add(new NewsfeedResponse(list.getId(),list.getTitle(),list.getContent(),list.getCreatedAt(),list.getModifiedAt()));
+        }
+
+        return GlobalResponse.success(status, message, data);
     }
+
+    @Transactional(readOnly = true)
+    public GlobalResponse<?> searchAllNewsfeed(
+            int status,
+            String message,
+            PrincipalDetails principalDetails,
+            int page) {
+        int constSize = 10;
+        //0~10만 나오게 페이지네이션
+        Pageable pageable = PageRequest.of(page, constSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Newsfeed> lists = newsfeedRepository.findAll(pageable);
+        List<NewsfeedResponse> data = new ArrayList<>();
+        for (Newsfeed list : lists) {
+            data.add(new NewsfeedResponse(list.getId(),list.getTitle(),list.getContent(),list.getCreatedAt(),list.getModifiedAt()));
+        }
+        return GlobalResponse.success(status, message, data);
+    }
+
+    public GlobalResponse<?> searchByLikesNewsfeed(
+            int status,
+            String message,
+            PrincipalDetails principalDetails,
+            int page) {
+        int constSize = 5;
+        //0~10만 나오게 페이지네이션
+        Pageable pageable = PageRequest.of(page, constSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+        //페이지에서 전부 찾음
+        Page<Newsfeed> lists = newsfeedRepository.findAll(pageable);
+        //Page => List 형변환
+        List<Newsfeed> collector = new ArrayList<>();
+        //List로 다시 담음
+        for (Newsfeed list : lists) {
+            collector.add(list);
+        }
+        // select * from Like where newsfeed_id in ("1","2","3");
+        List<Like> likeList = likeRepository.findByNewsfeed_Id(collector);
+
+        List<NewsfeedLikeResponse> data = new ArrayList<>();
+        //List 좋아요순 sort
+        collector.sort((a,b) -> {
+            long aLikes = likeList.stream()
+                    .filter(like->like.getNewsfeed() != null && like.getNewsfeed().getId().equals(a.getId())).count();
+            long bLikes = likeList.stream()
+                    .filter(like-> like.getNewsfeed() != null && like.getNewsfeed().getId().equals(b.getId())).count();
+            return Long.compare(bLikes, aLikes);
+        });
+
+        //종아요 수 담은 DTO 생성
+        for (Newsfeed list : collector) {
+            int likeCount = likeList.size();
+            data.add(new NewsfeedLikeResponse(list, likeCount));
+        }
+        return GlobalResponse.success(status, message, data);
+    }
+
 }

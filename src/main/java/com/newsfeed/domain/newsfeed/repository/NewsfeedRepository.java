@@ -13,4 +13,5 @@ public interface NewsfeedRepository extends JpaRepository<Newsfeed, Long> {
     Optional<List<Newsfeed>> findAllByUser(User user);
     // 유저의 뉴스피드 아이디로 조회
     Optional<Newsfeed> findByUserAndId(User user, Long newsfeedId);
+
 }
