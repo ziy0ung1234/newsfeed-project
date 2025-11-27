@@ -1,7 +1,9 @@
 package com.newsfeed.domain.newsfeed.contoller;
 
 import com.newsfeed.common.response.GlobalResponse;
+import com.newsfeed.common.response.GlobalResponse;
 import com.newsfeed.domain.auth.security.PrincipalDetails;
+import com.newsfeed.domain.newsfeed.dto.NewsfeedLikeResponse;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedRequest;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedResponse;
 import com.newsfeed.domain.newsfeed.service.NewsfeedService;
@@ -48,4 +50,35 @@ public class NewsfeedController {
         newsfeedService.deleteNewsfeed(newsfeedId, principalDetails);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<GlobalResponse<List<NewsfeedResponse>>> searchAllNewsfeed(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestParam(defaultValue = "0") int page
+            ) {
+        return ResponseEntity.status(HttpStatus.OK).body(newsfeedService.searchAllNewsfeed(HttpStatus.OK.value(),"searchAllNewsfeedResponse", principalDetails, page));
+    }
+
+    @GetMapping("/search/{userName}")
+    public ResponseEntity<GlobalResponse<List<NewsfeedResponse>>> searchByUserName(@PathVariable String userName, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return ResponseEntity.status(HttpStatus.OK).body(newsfeedService.searchByUserName(HttpStatus.OK.value(),"searchByUserNameResponse", userName, principalDetails));
+    }
+
+    @GetMapping("/search/likes")
+    public ResponseEntity<GlobalResponse<List<NewsfeedLikeResponse>>> searchByLikesNewsfeed(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestParam(defaultValue = "0") int page
+        ) {
+        return ResponseEntity.status(HttpStatus.OK).body(newsfeedService.searchByLikesNewsfeed(HttpStatus.OK.value(),"searchByLikesNewsfeedResponse", principalDetails, page));
+    }
+
+    @GetMapping("/search/date")
+    public ResponseEntity<GlobalResponse<List<NewsfeedResponse>>> searchByDate(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestParam String startDate,
+            @RequestParam String endDate
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(newsfeedService.searchByDate(HttpStatus.OK.value(),"searchByDateResponse", startDate, endDate));
+    }
+
 }
