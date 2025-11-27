@@ -10,6 +10,7 @@ import lombok.*;
 @Table(name="follows")
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 public class Follow extends BaseDateEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +24,7 @@ public class Follow extends BaseDateEntity {
     private User following;
 
     public Follow(Long id, User follower, User following) {
+        this.id = id;
         this.follower = follower;
         this.following = following;
     }
