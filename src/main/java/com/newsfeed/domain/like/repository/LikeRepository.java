@@ -17,4 +17,7 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     }
     Long countByNewsfeed_Id(Long newsfeedId);
     Long countByComment_Id(Long commentId);
+
+    boolean existsByUser_IdAndNewsfeed_Id(Long userId, Long newsfeedId);
+    boolean existsByUser_IdAndComment_Id(Long userId, Long commentId);
 }
