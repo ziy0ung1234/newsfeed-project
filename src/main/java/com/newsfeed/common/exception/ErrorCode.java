@@ -26,7 +26,6 @@ public enum ErrorCode {
     INVALID_PASSWORD(400, "비밀번호가 유효하지 않습니다."),
     VALIDATION_ERROR(400, "입력값이 유효하지 않습니다.");
 
-
     private final int status;
     private final String message;
 
