@@ -34,12 +34,8 @@ public class FollowService {
      * userId = 나
      * otherId = 내가 팔로우할 상대방
      */
-    public void follow(Long userId, Long otherId) {
-
-        //로그인 계정 검증
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new UserNotFoundException(LOGIN_REQUIRED)
-        );
+    public void follow(User user, Long otherId) {
+        Long userId = user.getId();
 
         //상대방 계정 검증
         User other = userRepository.findById(otherId)
@@ -58,7 +54,7 @@ public class FollowService {
         }
 
         //내 PK값 내용을 상대방 PK로 넘기기
-        followRepository.save(new Follow(userId,user,other));
+        followRepository.save(new Follow(user,other));
     }
 
     /**
@@ -66,6 +62,12 @@ public class FollowService {
      * (userId → otherId 관계 삭제)
      */
     public void unfollow(Long userId, Long otherId) {
+
+        //상대방 계정 검증
+        User other = userRepository.findById(otherId)
+                .orElseThrow(()-> new UserNotFoundException(VALIDATION_ERROR)
+                );
+        
        Follow relation = followRepository.findByFollowerIdAndFollowingId(userId,otherId)
                .orElseThrow(()-> new NotFoundException(VALIDATION_ERROR));
        followRepository.delete(relation);

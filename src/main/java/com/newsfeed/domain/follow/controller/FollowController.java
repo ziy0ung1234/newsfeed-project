@@ -31,12 +31,11 @@ public class FollowController {
      * (userId → otherId)
      * 내가(otherId)를 팔로우함
      */
-    @PostMapping("/{otherId}/followes")
+    @PostMapping("/{otherId}/follows")
     public ResponseEntity<GlobalResponse<FollowResponse>> follow(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable Long otherId) {
-        Long userId = principalDetails.getUser().getId();
-
-        FollowResponse response = new FollowResponse(userId, userId, otherId);
-        followService.follow(userId, otherId);
+        User user = principalDetails.getUser();
+        followService.follow(user, otherId);
+        FollowResponse response = new FollowResponse(otherId, user.getId(), otherId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(GlobalResponse.success(200, "[유저ID : " + otherId + "번의 유저를 팔로우 했습니다]", response));
@@ -46,7 +45,7 @@ public class FollowController {
      * 언팔로우
      * (userId → otherId 관계 삭제)
      */
-    @DeleteMapping("{otherId}/unfollowes")
+    @DeleteMapping("{otherId}/unfollows")
     public ResponseEntity<GlobalResponse<Void>> unfollow(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable Long otherId) {
         Long userId = principalDetails.getUser().getId();
         followService.unfollow(userId, otherId);
