@@ -23,8 +23,7 @@ public class Follow extends BaseDateEntity {
     @JoinColumn(name="following_id")
     private User following;
 
-    public Follow(Long id, User follower, User following) {
-        this.id = id;
+    public Follow(User follower, User following) {
         this.follower = follower;
         this.following = following;
     }
