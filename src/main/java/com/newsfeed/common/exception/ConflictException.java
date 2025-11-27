@@ -3,10 +3,9 @@ package com.newsfeed.common.exception;
 import lombok.Getter;
 
 @Getter
-public class NotFoundException extends RuntimeException {
+public class ConflictException extends RuntimeException {
     private final ErrorCode errorCode;
-
-    public NotFoundException(ErrorCode errorCode) {
+    public ConflictException(ErrorCode errorCode) {
         this.errorCode = errorCode;
     }
 }

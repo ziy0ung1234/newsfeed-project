@@ -2,6 +2,7 @@ package com.newsfeed.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.newsfeed.common.exception.ErrorCode;
+import com.newsfeed.domain.user.dto.userInfoDto.UserInfoResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,6 +13,7 @@ public class GlobalResponse<T> {
     private int status;
     private String message;
     private T data;
+
     //성공시
     public static <T> GlobalResponse<T> success(int status, String message, T data) {
         return new GlobalResponse<>(status, message, data);

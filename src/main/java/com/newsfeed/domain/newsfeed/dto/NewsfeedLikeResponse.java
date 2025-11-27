@@ -12,9 +12,9 @@ public class NewsfeedLikeResponse {
     private final String content;
     private final LocalDateTime createAt;
     private final LocalDateTime updateAt;
-    private final int likeCount;
+    private final Long likeCount;
 
-    public NewsfeedLikeResponse(Newsfeed newsfeed, int likeCount) {
+    public NewsfeedLikeResponse(Newsfeed newsfeed, Long likeCount) {
         this.id = newsfeed.getId();
         this.title = newsfeed.getTitle();
         this.content = newsfeed.getContent();

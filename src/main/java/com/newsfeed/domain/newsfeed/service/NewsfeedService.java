@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -187,24 +188,35 @@ public class NewsfeedService {
             collector.add(list);
         }
         // select * from Like where newsfeed_id in ("1","2","3");
-        List<Like> likeList = likeRepository.findByNewsfeed_Id(collector);
 
         List<NewsfeedLikeResponse> data = new ArrayList<>();
         //List 좋아요순 sort
-        collector.sort((a,b) -> {
-            long aLikes = likeList.stream()
-                    .filter(like->like.getNewsfeed() != null && like.getNewsfeed().getId().equals(a.getId())).count();
-            long bLikes = likeList.stream()
-                    .filter(like-> like.getNewsfeed() != null && like.getNewsfeed().getId().equals(b.getId())).count();
-            return Long.compare(bLikes, aLikes);
-        });
 
         //종아요 수 담은 DTO 생성
         for (Newsfeed list : collector) {
-            int likeCount = likeList.size();
+            Long likeCount = likeRepository.countByNewsfeed_Id(list.getId());
             data.add(new NewsfeedLikeResponse(list, likeCount));
         }
         return GlobalResponse.success(status, message, data);
     }
 
+    public GlobalResponse<?> searchByDate(int status, String message, String startDate, String endDate) {
+
+        LocalDateTime start = LocalDateTime.parse(startDate);
+        LocalDateTime end = LocalDateTime.parse(endDate);
+
+        List<Newsfeed> lists = newsfeedRepository.findAllByCreatedAtBetween(start, end);
+        List<NewsfeedResponse> data = lists.stream()
+                .map(n ->
+                        new NewsfeedResponse(
+                                n.getId(),
+                                n.getTitle(),
+                                n.getContent(),
+                                n.getCreatedAt(),
+                                n.getModifiedAt()))
+                .toList();
+
+
+        return GlobalResponse.success(status, message, data);
+    }
 }

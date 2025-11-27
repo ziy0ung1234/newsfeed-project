@@ -50,7 +50,7 @@ public class NewsfeedController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<GlobalResponse<?>> searchAllNewsfeed(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestParam(defaultValue = "0") int page
@@ -58,19 +58,26 @@ public class NewsfeedController {
         return ResponseEntity.status(HttpStatus.OK).body(newsfeedService.searchAllNewsfeed(HttpStatus.OK.value(),"searchAllNewsfeedResponse", principalDetails, page));
     }
 
-    @GetMapping("/{userName}")
+    @GetMapping("search/{userName}")
     public ResponseEntity<GlobalResponse<?>> searchByUserName(@PathVariable String userName, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return ResponseEntity.status(HttpStatus.OK).body(newsfeedService.searchByUserName(HttpStatus.OK.value(),"searchByUserNameResponse", userName, principalDetails));
     }
 
-    @GetMapping("/likes")
+    @GetMapping("search/likes")
     public ResponseEntity<GlobalResponse<?>> searchByLikesNewsfeed(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestParam(defaultValue = "0") int page
         ) {
-        return ResponseEntity.status(HttpStatus.OK).body(newsfeedService.searchByLikesNewsfeed(HttpStatus.OK.value(),"searchByLikesNewsfeed", principalDetails, page));
+        return ResponseEntity.status(HttpStatus.OK).body(newsfeedService.searchByLikesNewsfeed(HttpStatus.OK.value(),"searchByLikesNewsfeedResponse", principalDetails, page));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<GlobalResponse<?>> searchByDate(
+            @RequestParam String startDate,
+            @RequestParam String endDate
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(newsfeedService.searchByDate(HttpStatus.OK.value(),"searchByDateResponse", startDate, endDate));
+    }
 
 
 }
