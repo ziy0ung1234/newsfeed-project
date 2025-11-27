@@ -1,5 +1,6 @@
 package com.newsfeed.domain.newsfeed.dto;
 
+import com.newsfeed.domain.newsfeed.entity.Newsfeed;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -21,4 +22,5 @@ public class NewsfeedResponse {
         this.createAt = createAt;
         this.updateAt = updateAt;
     }
+
 }

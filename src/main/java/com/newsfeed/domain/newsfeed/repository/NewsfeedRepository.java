@@ -4,7 +4,11 @@ import com.newsfeed.common.exception.ErrorCode;
 import com.newsfeed.common.exception.NotFoundException;
 import com.newsfeed.domain.newsfeed.entity.Newsfeed;
 import com.newsfeed.domain.user.entity.User;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,4 +23,7 @@ public interface NewsfeedRepository extends JpaRepository<Newsfeed, Long> {
     Optional<List<Newsfeed>> findAllByUser(User user);
     // 유저의 뉴스피드 아이디로 조회
     Optional<Newsfeed> findByUserAndId(User user, Long newsfeedId);
+
+    // 날짜 기간사이 조회
+    List<Newsfeed> findAllByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 }
