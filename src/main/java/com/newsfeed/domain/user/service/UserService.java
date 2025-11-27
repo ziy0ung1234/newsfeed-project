@@ -10,6 +10,7 @@ import com.newsfeed.domain.user.dto.userInfoDto.UserInfoResponse;
 import com.newsfeed.domain.user.entity.User;
 import com.newsfeed.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ import static com.newsfeed.common.exception.ErrorCode.*;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 유저 프로필 조회 (본인/타인 구분)
@@ -74,16 +76,15 @@ public class UserService {
     public UpdatePasswordResponse updatePassword(Long userId, UpdatePasswordRequest pwRequest) {
         if (userId == null) throw new UserNotFoundException(LOGIN_REQUIRED);
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
-
-        if (!user.getPassword().equals(pwRequest.getCurrentPassword())) {
+        if (!passwordEncoder.matches(pwRequest.getCurrentPassword(), user.getPassword())) {
             throw new NotFoundException(PASSWORD_NOT_MATCH);
         }
-
         if (pwRequest.getNewPassword().equals(pwRequest.getCurrentPassword())) {
+//        if (passwordEncoder.matches(pwRequest.getNewPassword(), pwRequest.getCurrentPassword())) {
             throw new NotFoundException(INVALID_PASSWORD);
         }
 
-        user.setPassword(pwRequest.getNewPassword());
+        user.setPassword(passwordEncoder.encode(pwRequest.getNewPassword()));
         return UpdatePasswordResponse.of(user);
     }
 
