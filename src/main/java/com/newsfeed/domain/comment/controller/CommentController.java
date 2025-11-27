@@ -18,26 +18,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService service;
-    @PostMapping({
-            "/newsfeeds/{newsfeedId}/comments",
-            "/newsfeeds/{newsfeedId}/comments/{commentId}"
-    })
+    @PostMapping(
+            "/newsfeeds/{newsfeedId}/comments")
     public ResponseEntity<GlobalResponse<CommentCreateRes>> createComment(
             @PathVariable Long newsfeedId,
-            @PathVariable(required = false) Long commentId,
             @RequestBody CommentCreateReq req,
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
-        System.out.println(principalDetails);
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(HttpStatus.CREATED.value(),"postResponse",req,newsfeedId,commentId,principalDetails));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.createComment(HttpStatus.CREATED.value(),"postResponse",req, newsfeedId, principalDetails));
     }
+
+    @PostMapping("/newsfeeds/{newsfeedId}/comments/{commentId}")
+    public ResponseEntity<GlobalResponse<CommentCreateRes>> createChildComment(
+            @PathVariable Long newsfeedId,
+            @PathVariable Long commentId,
+            @RequestBody CommentCreateReq req,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.createChildComment(HttpStatus.CREATED.value(),"postResponse", req, newsfeedId, commentId, principalDetails));
+    }
+
     @GetMapping("newsfeeds/{newsfeedId}/comments")
-    public ResponseEntity<GlobalResponse<List<CommentFindResponse>>> getFromNewsfeedsComments(@PathVariable Long newsfeedId) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getFromNewsfeedsComments(HttpStatus.OK.value(),"getResponse", newsfeedId));
+    public ResponseEntity<GlobalResponse<List<CommentFindResponse>>> getFromNewsfeedsComments(
+            @PathVariable Long newsfeedId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getFromNewsfeedsComments(HttpStatus.OK.value(),"getResponse", newsfeedId, principalDetails));
     }
 
     @GetMapping("/comments/{commentId}")
-    public ResponseEntity<GlobalResponse<List<CommentFindResponse>>> getFromCommentsChildren(@PathVariable Long commentId) {
+    public ResponseEntity<GlobalResponse<List<CommentFindResponse>>> getFromCommentsChildren(@PathVariable Long commentId,
+                                                                                             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return ResponseEntity.status(HttpStatus.OK).body(service.getFromCommentsChildren(HttpStatus.OK.value(),"getResponse", commentId));
     }
 
@@ -52,7 +62,7 @@ public class CommentController {
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<GlobalResponse<Void>> deleteComment(
             @PathVariable Long commentId,
-            PrincipalDetails principalDetails
+            @AuthenticationPrincipal PrincipalDetails principalDetails
             ) {
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(HttpStatus.NO_CONTENT.value(),"deleteResponse",commentId, principalDetails));
     }

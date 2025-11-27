@@ -26,7 +26,29 @@ public class CommentService {
     private final NewsfeedRepository newsfeedRepository;
 
     //댓글 생성
-    public GlobalResponse<CommentCreateRes> create(int status, String message, CommentCreateReq req, Long newsfeedId, Long parentCommentId, PrincipalDetails principalDetails) {
+    public GlobalResponse<CommentCreateRes> createComment(int status, String message, CommentCreateReq req, Long newsfeedId, PrincipalDetails principalDetails) {
+
+        Newsfeed newsfeed = newsfeedRepository.findById(newsfeedId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NEWSFEED_NOT_FOUND));
+
+        User user = principalDetails.getUser();
+
+        //생성시에 부모가 없는 새 댓글일 수 있음. null, depth = 0 으로 새로 계층이 형성되는 댓글시에는 해당 변수 사용
+        int depth = 0;
+
+        Comment comment = new Comment(
+                req.getContent(),
+                depth,
+                user,
+                newsfeed,
+                null
+        );
+        commentRepository.save(comment);
+        CommentCreateRes res = new CommentCreateRes(comment);
+        return GlobalResponse.success(status, message, res);
+    }
+
+    public GlobalResponse<CommentCreateRes> createChildComment(int status, String message, CommentCreateReq req, Long newsfeedId, Long parentCommentId, PrincipalDetails principalDetails) {
 
         Newsfeed newsfeed = newsfeedRepository.findById(newsfeedId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NEWSFEED_NOT_FOUND));
@@ -57,15 +79,19 @@ public class CommentService {
         commentRepository.save(comment);
         CommentCreateRes res = new CommentCreateRes(comment);
         return GlobalResponse.success(status, message, res);
+
     }
 
     //게시글에 대한 부모계층 댓글 조회
-    public GlobalResponse<List<CommentFindResponse>> getFromNewsfeedsComments(int status, String message, Long newsfeedId) {
+    public GlobalResponse<List<CommentFindResponse>> getFromNewsfeedsComments(int status, String message, Long newsfeedId,PrincipalDetails principalDetails) {
 
             Newsfeed newsfeed = newsfeedRepository.findById(newsfeedId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NEWSFEED_NOT_FOUND));
 
-            List<Comment> comments = commentRepository.findAll();
+        User user = principalDetails.getUser();
+
+
+        List<Comment> comments = commentRepository.findAll();
 
             List<CommentFindResponse> data = new ArrayList<>();
 
