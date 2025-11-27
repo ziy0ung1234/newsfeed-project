@@ -167,7 +167,7 @@ public class NewsfeedService {
             String message,
             PrincipalDetails principalDetails,
             int page) {
-        int constSize = 5;
+        int constSize = 10;
         //0~10만 나오게 페이지네이션
         Pageable pageable = PageRequest.of(page, constSize, Sort.by(Sort.Direction.DESC, "createdAt"));
         //페이지에서 전부 찾음
