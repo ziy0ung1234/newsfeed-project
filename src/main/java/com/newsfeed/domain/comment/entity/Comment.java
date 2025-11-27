@@ -1,6 +1,7 @@
 package com.newsfeed.domain.comment.entity;
 
-import com.newsfeed.common.entity.*;
+import com.newsfeed.common.entity.BaseDateEntity;
+import com.newsfeed.domain.comment.dto.CommentPutRequest;
 import com.newsfeed.domain.newsfeed.entity.Newsfeed;
 import com.newsfeed.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -22,21 +23,26 @@ public class Comment extends BaseDateEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="user_id",  nullable = false)
-    private User user;
+    private User userId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="newsfeed_id",  nullable = false)
-    private Newsfeed newsfeed;
+    private Newsfeed newsfeedId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="parent_comment_id",  nullable = false)
-    private Comment parentComment;
+    private Comment parentCommentId;
 
-    public Comment(String content, int depth, User user, Newsfeed newsfeed, Comment parentComment) {
+    public Comment(String content, int depth, User userId, Newsfeed newsfeedId, Comment parentCommentId) {
         this.content = content;
         this.depth = depth;
-        this.user = user;
-        this.newsfeed = newsfeed;
-        this.parentComment = parentComment;
+        this.userId = userId;
+        this.newsfeedId = newsfeedId;
+        this.parentCommentId = parentCommentId;
+
+    }
+
+    public void update(CommentPutRequest req) {
+        this.content = req.getContent() != null ? req.getContent() : this.content;
     }
 }

@@ -19,7 +19,7 @@ public class User extends BaseDateEntity {
     @Column(nullable = false, unique = true, length = 30)
     private String email;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false,  unique = true, length = 30)
@@ -31,4 +31,10 @@ public class User extends BaseDateEntity {
         this.password = password;
         this.cellPhoneNumber = cellPhoneNumber;
     }
+
+    public void setUsername(String username) {this.username = username;}
+    public void setEmail(String email) {this.email = email;}
+    public void setPassword(String password) {this.password = password;}
+    public void setCellPhoneNumber(String cellPhoneNumber) {this.cellPhoneNumber = cellPhoneNumber;}
+
 }
