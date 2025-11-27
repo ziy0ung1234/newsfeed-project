@@ -73,9 +73,7 @@ public class NewsfeedService {
         Pageable pageable = PageRequest.of(page, size);
 
         // 로그인 된 유저의 뉴스피드가 존재하지 않을 경우
-        Page<Newsfeed> myNewsfeeds = newsfeedRepository.findAllByUserOrderByIdDesc(user, pageable).orElseThrow(
-                () -> new NotFoundException(NEWSFEED_NOT_FOUND)
-        );
+        Page<Newsfeed> myNewsfeeds = newsfeedRepository.findAllByUserOrderByIdDesc(user, pageable);
 
         // 페이지 함수인 맵으로 뉴스피드를 응답 dto로 변환 후 반환
         return myNewsfeeds.map(newsfeed -> new NewsfeedResponse(

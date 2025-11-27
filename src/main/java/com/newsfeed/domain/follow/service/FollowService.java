@@ -4,11 +4,17 @@ import com.newsfeed.common.exception.NotFoundException;
 import com.newsfeed.common.exception.UserNotFoundException;
 import com.newsfeed.domain.follow.dto.followCountResponse.FollowCountResponse;
 import com.newsfeed.domain.follow.dto.followUserResponse.FollowUserResponse;
+import com.newsfeed.domain.follow.dto.followingUserResponse.FollowingUserResponse;
 import com.newsfeed.domain.follow.entity.Follow;
 import com.newsfeed.domain.follow.repository.FollowRepository;
+import com.newsfeed.domain.newsfeed.entity.Newsfeed;
+import com.newsfeed.domain.newsfeed.repository.NewsfeedRepository;
 import com.newsfeed.domain.user.entity.User;
 import com.newsfeed.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +34,7 @@ public class FollowService {
 
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
+    private final NewsfeedRepository newsfeedRepository;
 
     /**
      * 팔로우 (userId → otherId)
@@ -110,4 +117,27 @@ public class FollowService {
                 .toList();
     }
 
+    /**
+     * 팔로잉 유저 단건유저 게시물 조회
+     */
+    public Page<FollowingUserResponse> followingInfo(Long userId, Long otherId, int page, int size) {
+
+        //상대방 계정 검증
+        User other = userRepository.findById(otherId)
+                .orElseThrow(()-> new UserNotFoundException(USER_NOT_FOUND));
+
+        boolean isFollowing = followRepository
+                .findByFollowerIdAndFollowingId(userId, otherId)
+                .isPresent();
+
+        if (!isFollowing) {
+            throw new NotFoundException(FORBIDDEN); // 팔로우 안한 유저의 게시글 조회 금지
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Newsfeed> pageResult = newsfeedRepository
+                .findAllByUserOrderByIdDesc(other, pageable);
+
+        return pageResult.map(FollowingUserResponse::of);
+    }
 }
