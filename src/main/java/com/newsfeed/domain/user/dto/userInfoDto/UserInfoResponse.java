@@ -39,9 +39,9 @@ public class UserInfoResponse {
     public static UserInfoResponse forOtherInfo(User user) {
         return new UserInfoResponse(
                 user.getId(),
-                null,
+                user.getEmail(),
                 user.getUsername(),
-                null,
+                user.getCellPhoneNumber(),
                 user.getCreatedAt(),
                 user.getModifiedAt());
     }
