@@ -26,7 +26,7 @@ CREATE TABLE `users` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `email` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `username` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `cell_phone_number` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `modified_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
