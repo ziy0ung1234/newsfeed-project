@@ -9,6 +9,4 @@ public class NotFoundException extends RuntimeException {
     public NotFoundException(ErrorCode errorCode) {
         this.errorCode = errorCode;
     }
-
-
 }
