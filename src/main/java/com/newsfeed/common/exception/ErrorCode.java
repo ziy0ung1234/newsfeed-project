@@ -9,6 +9,7 @@ public enum ErrorCode {
     //------409-----------------------
     USER_ALREADY_EXISTS(409, "이미 존재하는 사용자 이메일입니다."),
     CELLPHONENUMBER_ALREADY_EXISTS(409, "이미 존재하는 전화번호입니다."),
+    ALREADY_LIKED(409, "이미 좋아요 되어있습니다."),
     //------404-----------------------
     USER_NOT_FOUND(404, "없는 유저입니다"),
     NEWSFEED_NOT_FOUND(404, "없는 피드입니다"),
