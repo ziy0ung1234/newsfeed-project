@@ -1,7 +1,6 @@
 package com.newsfeed.domain.like.service;
 
-import com.newsfeed.common.exception.ErrorCode;
-import com.newsfeed.common.exception.UnauthorizedException;
+import com.newsfeed.common.exception.*;
 import com.newsfeed.domain.comment.entity.Comment;
 import com.newsfeed.domain.comment.repository.CommentRepository;
 import com.newsfeed.domain.like.dto.response.GetCountResponse;
@@ -34,11 +33,20 @@ public class LikeService {
         User user = userRepository.findOrThrow(userId);
         Newsfeed newsfeed = newsfeedRepository.findOrThrow(newsfeedId);
 
-        Like like = new Like(
-                user,
-                newsfeed,
-                null
-        );
+        //본인 게시글 좋아요 방지
+        if(newsfeed.getUser().getId().equals(userId)) {
+            throw new UnauthorizedException(ErrorCode.FORBIDDEN);
+        }
+
+        //중복 좋아요 방지
+        boolean alreadyLiked =
+                likeRepository.existsByUser_IdAndNewsfeed_Id(userId, newsfeedId);
+
+        if(alreadyLiked) {
+            throw new ConflictException(ErrorCode.ALREADY_LIKED);
+        }
+
+        Like like = new Like(user, newsfeed, null);
         likeRepository.save(like);
     }
 
@@ -68,11 +76,19 @@ public class LikeService {
     public void addCommentLike(Long commentId, Long userId) {
         User user = userRepository.findOrThrow(userId);
         Comment comment = commentRepository.findOrThrow(commentId);
-        Like like = new Like(
-                user,
-                null,
-                comment
-        );
+        // 본인 댓글 좋아요 방지
+        if(comment.getUserId().getId().equals(userId)) {
+            throw new UnauthorizedException(ErrorCode.FORBIDDEN);
+        }
+
+        // 중복 좋아요 방지
+        boolean exists = likeRepository
+                .existsByUser_IdAndComment_Id(userId, commentId);
+        if (exists) {
+            throw new UnauthorizedException(ErrorCode.FORBIDDEN);
+        }
+
+        Like like = new Like(user, null, comment);
         likeRepository.save(like);
     }
 
