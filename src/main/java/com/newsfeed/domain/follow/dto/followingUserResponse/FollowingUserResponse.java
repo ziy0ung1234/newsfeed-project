@@ -1,9 +1,7 @@
 package com.newsfeed.domain.follow.dto.followingUserResponse;
 
 import com.newsfeed.domain.newsfeed.entity.Newsfeed;
-import com.newsfeed.domain.user.entity.User;
 import lombok.Getter;
-import org.springframework.data.domain.ManagedTypes;
 
 import java.time.LocalDateTime;
 

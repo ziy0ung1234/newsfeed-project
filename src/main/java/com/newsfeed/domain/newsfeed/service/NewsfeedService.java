@@ -95,7 +95,6 @@ public class NewsfeedService {
                 ()-> new NotFoundException(NEWSFEED_NOT_FOUND)
         );
 
-
         // 유저의 뉴스피드 수정
         newsfeed.update(request.getTitle(), request.getContent());
 

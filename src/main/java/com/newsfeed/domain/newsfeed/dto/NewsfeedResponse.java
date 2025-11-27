@@ -1,6 +1,5 @@
 package com.newsfeed.domain.newsfeed.dto;
 
-import com.newsfeed.domain.newsfeed.entity.Newsfeed;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

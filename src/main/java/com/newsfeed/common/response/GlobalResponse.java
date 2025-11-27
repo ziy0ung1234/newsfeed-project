@@ -2,7 +2,6 @@ package com.newsfeed.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.newsfeed.common.exception.ErrorCode;
-import com.newsfeed.domain.user.dto.userInfoDto.UserInfoResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
