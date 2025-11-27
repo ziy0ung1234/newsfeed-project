@@ -25,5 +25,4 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     boolean existsByUser_IdAndComment_Id(Long userId, Long commentId);
     List<Like> findByNewsfeed(Newsfeed newsfeed);
 
-    List<Like> findByNewsfeed_Id(List<Newsfeed> newsfeedId);
 }

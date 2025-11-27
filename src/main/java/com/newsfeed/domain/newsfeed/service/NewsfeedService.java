@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -137,7 +138,7 @@ public class NewsfeedService {
     }
 
     @Transactional(readOnly = true)
-    public GlobalResponse<?> searchByUserName(
+    public GlobalResponse<List<NewsfeedResponse>> searchByUserName(
             int status,
             String message,
             String userName,
@@ -155,7 +156,7 @@ public class NewsfeedService {
     }
 
     @Transactional(readOnly = true)
-    public GlobalResponse<?> searchAllNewsfeed(
+    public GlobalResponse<List<NewsfeedResponse>> searchAllNewsfeed(
             int status,
             String message,
             PrincipalDetails principalDetails,
@@ -171,7 +172,7 @@ public class NewsfeedService {
         return GlobalResponse.success(status, message, data);
     }
 
-    public GlobalResponse<?> searchByLikesNewsfeed(
+    public GlobalResponse<List<NewsfeedLikeResponse>> searchByLikesNewsfeed(
             int status,
             String message,
             PrincipalDetails principalDetails,
@@ -187,25 +188,28 @@ public class NewsfeedService {
         for (Newsfeed list : lists) {
             collector.add(list);
         }
-        // select * from Like where newsfeed_id in ("1","2","3");
-
+        //GlobalResponse 에 담을 list 생성
         List<NewsfeedLikeResponse> data = new ArrayList<>();
-        //List 좋아요순 sort
 
         //종아요 수 담은 DTO 생성
         for (Newsfeed list : collector) {
             Long likeCount = likeRepository.countByNewsfeed_Id(list.getId());
             data.add(new NewsfeedLikeResponse(list, likeCount));
         }
+        //data 좋아요순 sort
+        data.sort((a,b)-> Long.compare(b.getLikeCount(), a.getLikeCount()));
         return GlobalResponse.success(status, message, data);
     }
 
-    public GlobalResponse<?> searchByDate(int status, String message, String startDate, String endDate) {
+    public GlobalResponse<List<NewsfeedResponse>> searchByDate(int status, String message, String startDate, String endDate) {
 
-        LocalDateTime start = LocalDateTime.parse(startDate);
-        LocalDateTime end = LocalDateTime.parse(endDate);
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
 
-        List<Newsfeed> lists = newsfeedRepository.findAllByCreatedAtBetween(start, end);
+        LocalDateTime startDateTime = start.atStartOfDay();
+        LocalDateTime endDateTime = end.atTime(23, 59, 59);
+
+        List<Newsfeed> lists = newsfeedRepository.findAllByCreatedAtBetween(startDateTime, endDateTime);
         List<NewsfeedResponse> data = lists.stream()
                 .map(n ->
                         new NewsfeedResponse(
