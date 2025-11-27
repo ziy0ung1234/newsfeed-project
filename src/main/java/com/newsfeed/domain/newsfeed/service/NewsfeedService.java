@@ -4,8 +4,6 @@ import com.newsfeed.common.exception.ErrorCode;
 import com.newsfeed.common.exception.NotFoundException;
 import com.newsfeed.common.response.GlobalResponse;
 import com.newsfeed.domain.auth.security.PrincipalDetails;
-import com.newsfeed.common.response.GlobalResponse;
-import com.newsfeed.domain.like.entity.Like;
 import com.newsfeed.domain.like.repository.LikeRepository;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedLikeResponse;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedRequest;
@@ -21,13 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import static com.newsfeed.common.exception.ErrorCode.NEWSFEED_NOT_FOUND;
 
@@ -69,32 +64,27 @@ public class NewsfeedService {
     }
 
     @Transactional(readOnly = true)
-    public List<NewsfeedResponse> myNewsfeed(PrincipalDetails principalDetails) {
+    public Page<NewsfeedResponse> myNewsfeed(PrincipalDetails principalDetails, int page, int size) {
 
         // 로그인 된 유저 정보
         User user = principalDetails.getUser();
 
+        // 페이지 번호와 페이지 크기 지정
+        Pageable pageable = PageRequest.of(page, size);
+
         // 로그인 된 유저의 뉴스피드가 존재하지 않을 경우
-        List<Newsfeed> myNewsfeeds = newsfeedRepository.findAllByUser(user).orElseThrow(
+        Page<Newsfeed> myNewsfeeds = newsfeedRepository.findAllByUserOrderByIdDesc(user, pageable).orElseThrow(
                 () -> new NotFoundException(NEWSFEED_NOT_FOUND)
         );
 
-        List<NewsfeedResponse> myNewsfeedList = new ArrayList<>();
-
-        // 순차 접근 후 뉴스피드 응답객체 생성
-        for (Newsfeed newsfeed : myNewsfeeds) {
-            NewsfeedResponse newsfeedResponse = new NewsfeedResponse(
-                    newsfeed.getId(),
-                    newsfeed.getTitle(),
-                    newsfeed.getContent(),
-                    newsfeed.getCreatedAt(),
-                    newsfeed.getModifiedAt()
-            );
-            // 응답 객체 목록들을 마이뉴스피드 목록에 추가
-            myNewsfeedList.add(newsfeedResponse);
-        }
-        // 성공 상태코드와 마이 뉴스피드 목록 반환
-        return myNewsfeedList;
+        // 페이지 함수인 맵으로 뉴스피드를 응답 dto로 변환 후 반환
+        return myNewsfeeds.map(newsfeed -> new NewsfeedResponse(
+                newsfeed.getId(),
+                newsfeed.getTitle(),
+                newsfeed.getContent(),
+                newsfeed.getCreatedAt(),
+                newsfeed.getModifiedAt()
+        ));
     }
 
     @Transactional

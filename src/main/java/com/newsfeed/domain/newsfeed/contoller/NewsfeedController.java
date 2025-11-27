@@ -1,7 +1,6 @@
 package com.newsfeed.domain.newsfeed.contoller;
 
-import com.newsfeed.common.response.GlobalResponse;
-import com.newsfeed.common.response.GlobalResponse;
+import com.newsfeed.common.response.GlobalResponse;;
 import com.newsfeed.domain.auth.security.PrincipalDetails;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedLikeResponse;
 import com.newsfeed.domain.newsfeed.dto.NewsfeedRequest;
@@ -9,6 +8,7 @@ import com.newsfeed.domain.newsfeed.dto.NewsfeedResponse;
 import com.newsfeed.domain.newsfeed.service.NewsfeedService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,9 +31,12 @@ public class NewsfeedController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<GlobalResponse<List<NewsfeedResponse>>> getNewsfeed(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<GlobalResponse<Page<NewsfeedResponse>>> getNewsfeed(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.status(HttpStatus.OK).body(GlobalResponse.success(200
-                ,"마이 뉴스피드 조회완료",newsfeedService.myNewsfeed(principalDetails)));
+                ,"마이 뉴스피드 조회완료",newsfeedService.myNewsfeed(principalDetails, page, size)));
     }
 
     @PutMapping("/{newsfeedId}")
