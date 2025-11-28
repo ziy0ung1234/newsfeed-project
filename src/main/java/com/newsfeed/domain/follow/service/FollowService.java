@@ -79,8 +79,8 @@ public class FollowService {
      * followerCount  = 나를 팔로우한 사람 수
      */
     public FollowCountResponse followers(Long userId) {
-        Long following = followRepository.countByFollowingId(userId);
-        Long follower = followRepository.countByFollowerId(userId);
+        Long follower = followRepository.countByFollowingId(userId);
+        Long following = followRepository.countByFollowerId(userId);
         return FollowCountResponse.of(following, follower);
     }
 

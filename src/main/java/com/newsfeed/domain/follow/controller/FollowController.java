@@ -59,7 +59,7 @@ public class FollowController {
      * followingCount = 내가 팔로우한 사람 수
      * followerCount  = 나를 팔로우한 사람 수
      */
-    @GetMapping("/{userId}/Followers")
+    @GetMapping("/me/Followers")
     public ResponseEntity<GlobalResponse<FollowCountResponse>> followers(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         User user = principalDetails.getUser();
         Long userId = user.getId();
