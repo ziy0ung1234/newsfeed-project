@@ -80,7 +80,6 @@ public class UserService {
             throw new NotFoundException(PASSWORD_NOT_MATCH);
         }
         if (pwRequest.getNewPassword().equals(pwRequest.getCurrentPassword())) {
-//        if (passwordEncoder.matches(pwRequest.getNewPassword(), pwRequest.getCurrentPassword())) {
             throw new NotFoundException(INVALID_PASSWORD);
         }
 

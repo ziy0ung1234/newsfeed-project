@@ -5,9 +5,11 @@ import com.newsfeed.domain.auth.security.PrincipalDetails;
 import com.newsfeed.domain.follow.dto.followCountResponse.FollowCountResponse;
 import com.newsfeed.domain.follow.dto.followResponse.FollowResponse;
 import com.newsfeed.domain.follow.dto.followUserResponse.FollowUserResponse;
+import com.newsfeed.domain.follow.dto.followingUserResponse.FollowingUserResponse;
 import com.newsfeed.domain.follow.service.FollowService;
 import com.newsfeed.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -94,4 +96,21 @@ public class FollowController {
                 .status(HttpStatus.OK)
                 .body(GlobalResponse.success(200,"팔로워 목록 조회 완료", responses));
     }
+
+    /**
+     * 팔로잉 유저 단건 조회
+     * = 내가 팔로우 “하고 있는” 사람 한명 조회
+     */
+    @GetMapping("/{otherId}/following")
+    public ResponseEntity<GlobalResponse<Page<FollowingUserResponse>>> followerUsers(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                                                     @PathVariable Long otherId,
+                                                                                     @RequestParam(defaultValue = "0") int page,
+                                                                                     @RequestParam(defaultValue = "10") int size) {
+        Long userId = principalDetails.getUser().getId();
+        Page<FollowingUserResponse> responses =followService.followingInfo(userId, otherId, page, size);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(GlobalResponse.success(200,"[" + otherId + " 번 의 유저 게시물 조회 완료]", responses));
+    }
+
 }
