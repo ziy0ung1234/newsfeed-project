@@ -2,7 +2,6 @@ package com.newsfeed.domain.auth.jwt;
 
 import com.newsfeed.domain.auth.security.PrincipalDetails;
 import com.newsfeed.domain.auth.security.PrincipalDetailsService;
-import com.newsfeed.domain.user.entity.User;
 import com.newsfeed.domain.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
