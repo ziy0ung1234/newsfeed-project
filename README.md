@@ -33,7 +33,9 @@
 
 ## 🖊️ API 명세서 및 ERD 작성
 
-<img width="663" height="626" alt="스크린샷 2025-11-24 오전 10 17 34" src="https://github.com/user-attachments/assets/414a2357-f99b-4925-b2a3-dd80320cdab6" />
+![ERD](https://github.com/user-attachments/assets/414a2357-f99b-4925-b2a3-dd80320cdab6)
+
+[API 명세서 링크](https://www.notion.so/teamsparta/6-B3S2-2b22dc3ef51480ff80abfcd1d7e0626e?source=copy_link#2b22dc3ef51481688a85c492992dde68)
 
 ---
 
